@@ -1,0 +1,46 @@
+## Server Config
+spring:
+  application:
+    name: scmciwh
+  profiles:
+#    如果一开始这样配置的话  报错：found character '@' that cannot start any token. (Do not use @ for indentation)
+#    那么需要进行一次构建(install),就没问题了
+    active: @activatedProperties@
+
+server:
+  port: 9090
+  servlet:
+    context-path: /
+
+---
+# Database Pool
+spring:
+  datasource:
+    hikari:
+      connection-timeout: 20000
+      minimum-idle: 10
+      maximum-pool-size: 50
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      auto-commit: true
+
+---
+# Hibernate
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        use-new-id-generator-mappings: true
+        ddl-auto: update
+        jdbc.batch_size: 20
+        order_inserts: true
+        naming:
+          implicit-strategy: default
+    show-sql: false
+    open-in-view: false
+
+#logging:
+#    config: classpath:logback-spring.xml
+#    path: log

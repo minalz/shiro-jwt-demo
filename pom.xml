@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.minalz</groupId>
-    <artifactId>shiro-demo</artifactId>
+    <artifactId>shiro-jwt-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>shiro-demo</name>
     <description>Demo project for Spring Boot</description>
@@ -81,6 +81,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
         </dependency>
 
     </dependencies>

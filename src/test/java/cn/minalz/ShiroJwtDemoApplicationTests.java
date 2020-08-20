@@ -20,7 +20,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ShiroDemoApplicationTests {
+public class ShiroJwtDemoApplicationTests {
     @Autowired
     private UserRepository userRepository;
     @Autowired

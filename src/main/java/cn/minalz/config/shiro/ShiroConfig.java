@@ -1,6 +1,6 @@
 package cn.minalz.config.shiro;
 
-import cn.minalz.config.filter.MyFormAuthenticationFilter;
+import cn.minalz.config.filter.JWTFilter;
 import cn.minalz.config.filter.MyLogoutFilter;
 import cn.minalz.config.redis.ShiroRedisSessionDao;
 import cn.minalz.dao.UserRepository;
@@ -29,12 +29,6 @@ public class ShiroConfig {
 
     @Bean
     public Realm realm() {
-        // 创建 SimpleAccountRealm 对象
-//        SimpleAccountRealm realm = new SimpleAccountRealm();
-//        // 添加两个用户。参数分别是 username、password、roles 。
-//        realm.addAccount("admin", "admin", "CJGLY");
-//        realm.addAccount("normal", "normal", "CJGLY");
-//        return realm;
         MyRealm myRealm = new MyRealm();
         //告诉realm密码匹配方式
         myRealm.setCredentialsMatcher(myCredentialsMatcher());
@@ -57,7 +51,7 @@ public class ShiroConfig {
 //        securityManager.setRememberMeManager(rememberMeManager());
         // 设置其使用的 Realm
         securityManager.setRealm(this.realm());
-        securityManager.setSessionManager(sessionManager());
+//        securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
@@ -71,8 +65,8 @@ public class ShiroConfig {
 
         // <3> 设置 URL 们
         filterFactoryBean.setLoginUrl("/login"); // 登陆 URL
-        filterFactoryBean.setSuccessUrl("/login_success"); // 登陆成功 URL
-        filterFactoryBean.setUnauthorizedUrl("/unauthorized"); // 无权限 URL
+//        filterFactoryBean.setSuccessUrl("/login_success"); // 登陆成功 URL
+//        filterFactoryBean.setUnauthorizedUrl("/unauthorized"); // 无权限 URL
 
         // 添加自定义的shiro注销过滤器
         filterFactoryBean.setFilters(myFilters());
@@ -174,7 +168,8 @@ public class ShiroConfig {
         filterMap.put("/scmciwh/admin", "roles[CJGLY]"); // 超级管理员
         filterMap.put("/scmciwh/normal", "roles[GLDP]"); // 需要 NORMAL 角色
         filterMap.put("/logout", "logout"); // 退出
-        filterMap.put("/**", "authc"); // 默认剩余的 URL ，需要经过认证
+        filterMap.put("/**", "jwtFilter"); // 默认剩余的 URL ，需要经过认证
+//        filterMap.put("/**", "authc"); // 默认剩余的 URL ，需要经过认证
         return filterMap;
     }
 
@@ -184,8 +179,10 @@ public class ShiroConfig {
      */
     private Map<String, Filter> myFilters(){
         Map<String, Filter> filtersMap = new LinkedHashMap<>();
+        // 自定义JWTFilter
+        filtersMap.put("jwtFilter",new JWTFilter());
         // 自定义authc权限验证的过滤器
-        filtersMap.put("authc", new MyFormAuthenticationFilter());
+//        filtersMap.put("authc", new MyFormAuthenticationFilter());
         // 配置自定义的shiro注销过滤器
         filtersMap.put("logout", new MyLogoutFilter());
         return filtersMap;

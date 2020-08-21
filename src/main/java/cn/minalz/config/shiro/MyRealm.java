@@ -1,9 +1,11 @@
 package cn.minalz.config.shiro;
 
+import cn.minalz.config.jwt.JwtToken;
 import cn.minalz.dao.UserRepository;
 import cn.minalz.model.Permission;
 import cn.minalz.model.Role;
 import cn.minalz.model.User;
+import cn.minalz.utils.JwtUtil;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -12,6 +14,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,14 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     private UserRepository scmciwhUserRepository;
+
+    /**
+     * 大坑！，必须重写此方法，不然Shiro会报错
+     */
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
 
     //获取权限信息的方法
     @Override
@@ -55,12 +66,13 @@ public class MyRealm extends AuthorizingRealm {
 
     //获取认证信息的方法
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
         //token是封装好的用户提交的用户名密码
-        String username = ((UsernamePasswordToken) token).getUsername();
-//        char[] password = ((UsernamePasswordToken) token).getPassword();
-//        System.out.println(password + "---");
-//        System.out.println(String.valueOf(password));
+        JwtToken jwtToken = (JwtToken) auth;
+        String token = (String)jwtToken.getPrincipal();
+        Map<String, Object> tokenMap = JwtUtil.validateToken(token);
+        User user1 = (User)tokenMap.get("user");
+        String username = (String)tokenMap.get("username");
         //获取用户
         User user = scmciwhUserRepository.findByUsername(username);
         if(user == null){
@@ -69,6 +81,7 @@ public class MyRealm extends AuthorizingRealm {
             //封装AuthenticationInfo
 //            ByteSource bsSalt = new SimpleByteSource(user.getPrivateSalt());
 //            new MySimpleByteSource(salt)
+//            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(token, token, getName());
             SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user,user.getPassword(),null,getName());
             return authenticationInfo;
         }

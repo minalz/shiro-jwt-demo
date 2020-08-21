@@ -1,10 +1,10 @@
 package cn.minalz.controller;
 
 import cn.minalz.dao.UserRepository;
+import cn.minalz.model.User;
+import cn.minalz.utils.JwtUtil;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/")
@@ -34,7 +34,7 @@ public class LoginController {
         return "login.html";
     }
 
-    @ResponseBody
+    /*@ResponseBody
     @PostMapping("/login")
     public String login(HttpServletRequest request) {
         // <1> 判断是否已经登陆
@@ -60,25 +60,23 @@ public class LoginController {
             logger.error("[login][未知登陆错误：{}]", shiroLoginFailure);
         }
         return "登陆失败，原因：" + msg;
-        /*try{
-            // subject - securityManager - realm
-            Subject subject = SecurityUtils.getSubject();
-            AuthenticationToken token = new UsernamePasswordToken(username,password);
-            subject.login(token);
-            return "success";
-        }catch (UnknownAccountException e){
-            e.printStackTrace();
-            model.addAttribute("errMessage","用户不存在");
-            return "login";
-        }catch (IncorrectCredentialsException e){
-            e.printStackTrace();
-            model.addAttribute("errMessage","密码错误");
-            return "login";
-        }catch (Exception e){
-            e.printStackTrace();
-            model.addAttribute("errMessage","系统错误");
-            return "login";
-        }*/
+    }*/
+
+    @ResponseBody
+    @PostMapping("/login")
+    public String login(String username, String password) {
+        // <1> 判断是否已经登陆
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.getPrincipal() != null) {
+            return "你已经登陆账号：" + subject.getPrincipal();
+        }
+        User scmciwhUserModel = scmciwhUserRepository.findByUsername(username);
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("username",scmciwhUserModel.getId());
+        map.put("user",scmciwhUserModel);
+        String token = JwtUtil.generateToken(map);
+
+        return token;
     }
 
     @RequestMapping("/user/logout")

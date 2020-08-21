@@ -5,9 +5,9 @@ import cn.minalz.dao.RoleRepository;
 import cn.minalz.dao.UserRepository;
 import cn.minalz.dto.TreeNode;
 import cn.minalz.model.Permission;
+import cn.minalz.model.Role;
 import cn.minalz.model.User;
 import cn.minalz.service.ITreeService;
-import cn.minalz.service.impl.PermissionServiceImpl;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,8 +56,18 @@ public class ShiroJwtDemoApplicationTests {
 
     @Test
     public void test3(){
-        TreeNode treeById = treeService.getTreeById(1l);
+        TreeNode treeById = treeService.getTreeById(6l);
+        TreeNode treeById2 = treeService.getTreeById(7l);
         Object o = JSON.toJSON(treeById);
+        Object o2 = JSON.toJSON(treeById2);
+        System.out.println(o);
+        System.out.println(o2);
+    }
+
+    @Test
+    public void test4(){
+        List<Role> all = roleRepository.findAll();
+        Object o = JSON.toJSON(all);
         System.out.println(o);
     }
 

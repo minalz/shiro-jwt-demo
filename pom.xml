@@ -11,7 +11,7 @@
     <groupId>cn.minalz</groupId>
     <artifactId>shiro-jwt-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shiro-demo</name>
+    <name>shiro-jwt-demo</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

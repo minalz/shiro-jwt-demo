@@ -1,6 +1,5 @@
 package cn.minalz.config.filter;
 
-import org.apache.shiro.session.SessionException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 
@@ -16,10 +15,10 @@ public class MyLogoutFilter extends LogoutFilter {
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         //在这里执行退出系统前需要清空的数据
         Subject subject = getSubject(request, response);
-        String redirectUrl = getRedirectUrl(request, response, subject);
+//        String redirectUrl = getRedirectUrl(request, response, subject);
         try {
             subject.logout();
-        } catch (SessionException ise) {
+        } catch (Exception ise) {
             ise.printStackTrace();
         }
         issueRedirect(request, response, "/login");

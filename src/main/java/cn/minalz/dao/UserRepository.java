@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @description:
@@ -17,7 +18,7 @@ public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificati
      * @param username
      * @return
      */
-    User findByUsername(String username);
+    Optional<User> findTopByUsername(String username);
 
     /**
      * 查询所有对应的角色

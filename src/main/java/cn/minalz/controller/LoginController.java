@@ -2,6 +2,7 @@ package cn.minalz.controller;
 
 import cn.minalz.dao.UserRepository;
 import cn.minalz.model.User;
+import cn.minalz.utils.Common;
 import cn.minalz.utils.JwtUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -70,13 +72,30 @@ public class LoginController {
         if (subject.getPrincipal() != null) {
             return "你已经登陆账号：" + subject.getPrincipal();
         }
-        User scmciwhUserModel = scmciwhUserRepository.findByUsername(username);
+        Optional<User> topByUsername = scmciwhUserRepository.findTopByUsername(username);
+        // 两个提示都一样 可以让用户不知道到底是账号还是密码错误 一定程度可以迷惑恶意攻击者
+        if(!topByUsername.isPresent()){
+            return "登录账号密码错误";
+        }
+        User user = topByUsername.get();
+        password = Common.getMD5(password);
+        if(!user.getPassword().equals(password)){
+            return "登录账号密码错误";
+        }
+
         HashMap<String,Object> map = new HashMap<>();
-        map.put("username",scmciwhUserModel.getId());
-        map.put("user",scmciwhUserModel);
+        map.put("username",user.getUsername());
+//        map.put("user",scmciwhUserModel);
         String token = JwtUtil.generateToken(map);
 
         return token;
+    }
+
+    public static void main(String[] args) {
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("username","cjgly");
+        String token = JwtUtil.generateToken(map);
+        System.out.println("token -- " + token);
     }
 
     @RequestMapping("/user/logout")

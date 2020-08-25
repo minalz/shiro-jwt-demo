@@ -2,18 +2,19 @@ package cn.minalz.config.shiro;
 
 import cn.minalz.config.filter.JWTFilter;
 import cn.minalz.config.filter.MyLogoutFilter;
-import cn.minalz.config.redis.ShiroRedisSessionDao;
+import cn.minalz.config.jwt.JwtDefaultSubjectFactory;
 import cn.minalz.dao.UserRepository;
 import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler;
-import org.apache.shiro.session.mgt.SessionFactory;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,7 +32,7 @@ public class ShiroConfig {
     public Realm realm() {
         MyRealm myRealm = new MyRealm();
         //告诉realm密码匹配方式
-        myRealm.setCredentialsMatcher(myCredentialsMatcher());
+//        myRealm.setCredentialsMatcher(myCredentialsMatcher());
         //开启授权信息的缓存，默认开启
         myRealm.setAuthorizationCachingEnabled(true);
         myRealm.setAuthorizationCacheName("author");
@@ -52,6 +53,16 @@ public class ShiroConfig {
         // 设置其使用的 Realm
         securityManager.setRealm(this.realm());
 //        securityManager.setSessionManager(sessionManager());
+
+        // 关闭 ShiroDAO 功能
+        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        // 不需要将 Shiro Session 中的东西存到任何地方（包括 Http Session 中）
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+        securityManager.setSubjectDAO(subjectDAO);
+        //禁止Subject的getSession方法
+        securityManager.setSubjectFactory(new JwtDefaultSubjectFactory());
         return securityManager;
     }
 
@@ -94,79 +105,16 @@ public class ShiroConfig {
         return cacheManager;
     }
 
-    // 自定义shiroSessionFactroy
-//    @Bean
-    public SessionFactory sessionFactory(){
-        MyShiroSessionFactory myShiroSessionFactory = new MyShiroSessionFactory();
-        return myShiroSessionFactory;
-    }
-
-    // 自定义session监听器
-    /*@Bean
-    public SessionListener sessionListener(){
-        MyShiroSessionListener myShiroSessionListener = new MyShiroSessionListener();
-        return myShiroSessionListener;
-    }*/
-
-    /**
-     * 自定义会话管理器
-     * @return
-     */
-    @Bean
-    public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(redisSessionDAO());
-
-        // 设置会话过期时间
-        // 默认半小时
-        sessionManager.setGlobalSessionTimeout(20*1000);
-        // 默认自动调用SessionDAO的delete方法删除会话
-        sessionManager.setDeleteInvalidSessions(true);
-        // 删除在session过期时跳转页面时自动在URL中添加JSESSIONID
-        sessionManager.setSessionIdUrlRewritingEnabled(false);
-        //是否开启定时调度器进行检测过期session 默认为true
-        sessionManager.setSessionValidationSchedulerEnabled(true);
-        sessionManager.setSessionValidationScheduler(configSessionValidationScheduler());
-
-        // 设置会话定时检查 默认一小时
-        sessionManager.setSessionValidationInterval(5000);
-        // 设置自定义的sessionFactory
-//        sessionManager.setSessionFactory(sessionFactory());
-        // 设置自定义的session监听器
-//        LinkedList<SessionListener> listeners = new LinkedList<SessionListener>();
-//        listeners.add(sessionListener());
-//        sessionManager.setSessionListeners(listeners);
-        return sessionManager;
-    }
-
-    /**
-     * session会话验证调度器
-     * @return session会话验证调度器
-     */
-    @Bean
-    public ExecutorServiceSessionValidationScheduler configSessionValidationScheduler() {
-        ExecutorServiceSessionValidationScheduler sessionValidationScheduler = new ExecutorServiceSessionValidationScheduler();
-        //设置session的失效扫描间隔，单位为毫秒
-        sessionValidationScheduler.setInterval(20*1000);
-        return sessionValidationScheduler;
-    }
-
-    @Bean
-    public SessionDAO redisSessionDAO(){
-        ShiroRedisSessionDao redisDAO = new ShiroRedisSessionDao();
-        return redisDAO;
-    }
-
     /**
      * 设置访问权限  访问xx资源 需要xx权限
      * @return
      */
     private Map<String, String> filterChainDefinitionMap() {
         Map<String, String> filterMap = new LinkedHashMap<>(); // 注意要使用有序的 LinkedHashMap ，顺序匹配
-//        filterMap.put("/login", "anon"); // 允许匿名访问
+        filterMap.put("/login", "anon"); // 允许匿名访问
 //        filterMap.put("/", "anon"); // 允许匿名访问
-        filterMap.put("/scmciwh/admin", "roles[CJGLY]"); // 超级管理员
-        filterMap.put("/scmciwh/normal", "roles[GLDP]"); // 需要 NORMAL 角色
+//        filterMap.put("/scmciwh/admin", "roles[CJGLY]"); // 超级管理员
+//        filterMap.put("/scmciwh/normal", "roles[GLDP]"); // 需要 NORMAL 角色
         filterMap.put("/logout", "logout"); // 退出
         filterMap.put("/**", "jwtFilter"); // 默认剩余的 URL ，需要经过认证
 //        filterMap.put("/**", "authc"); // 默认剩余的 URL ，需要经过认证
@@ -186,6 +134,24 @@ public class ShiroConfig {
         // 配置自定义的shiro注销过滤器
         filtersMap.put("logout", new MyLogoutFilter());
         return filtersMap;
+    }
+
+    /**
+     * 注解支持
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAAP = new DefaultAdvisorAutoProxyCreator();
+        defaultAAP.setProxyTargetClass(true);
+        return defaultAAP;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
     }
 
 }

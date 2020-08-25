@@ -2,135 +2,74 @@ package cn.minalz.config.filter;
 
 import cn.minalz.config.jwt.JwtToken;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.apache.shiro.web.filter.AccessControlFilter;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * 自定义JWTFilter
- */
+/*
+ * 自定义一个Filter，用来拦截所有的请求判断是否携带Token
+ * isAccessAllowed()判断是否携带了有效的JwtToken
+ * onAccessDenied()是没有携带JwtToken的时候进行账号密码登录，登录成功允许访问，登录失败拒绝访问
+ * */
 @Slf4j
-public class JWTFilter extends BasicHttpAuthenticationFilter {
-
-    /**
-     * 判断用户是否想要登入。
-     * 检测header里面是否包含token字段即可
-     */
+public class JWTFilter extends AccessControlFilter {
+    /*
+     * 1. 返回true，shiro就直接允许访问url
+     * 2. 返回false，shiro才会根据onAccessDenied的方法的返回值决定是否允许访问url
+     * */
     @Override
-    protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
-        HttpServletRequest req = (HttpServletRequest) request;
-        String authorization = req.getHeader("token");
-        return authorization != null;
-    }
-
-    /**
-     *
-     */
-    @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String authorization = httpServletRequest.getHeader("token");
-        JwtToken token = new JwtToken(authorization);
-        // 提交给realm进行登入，如果错误他会抛出异常并被捕获
-        getSubject(request, response).login(token);
-        // 如果没有抛出异常则代表登入成功，返回true
-        return true;
-    }
-
-    /**
-     * 这里我们详细说明下为什么最终返回的都是true，即允许访问
-     * 例如我们提供一个地址 GET /article
-     * 登入用户和游客看到的内容是不同的
-     * 如果在这里返回了false，请求会被直接拦截，用户看不到任何东西
-     * 所以我们在这里返回true，Controller中可以通过 subject.isAuthenticated() 来判断用户是否登入
-     * 如果有些资源只有登入用户才能访问，我们只需要在方法上面加上 @RequiresAuthentication 注解即可
-     * 但是这样做有一个缺点，就是不能够对GET,POST等请求进行分别过滤鉴权(因为我们重写了官方的方法)，但实际上对应用影响不大
-     */
-    @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        System.out.println("isAccessAllowed...");
-//        if (isLoginAttempt(request, response)) {
-//            try {
-//                executeLogin(request, response);
-//            } catch (Exception e) {
-//                System.out.println(e.getMessage());
-//                request.setAttribute("msg",e.getMessage());
-//                response401(request, response);
-//            }
-//        }
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+        log.warn("isAccessAllowed 方法被调用");
+        //这里先让它始终返回false来使用onAccessDenied()方法
         return false;
     }
 
     /**
-     * 将非法请求跳转到 /401
+     * 返回结果为true表明登录通过
      */
-    private void response401(ServletRequest req, ServletResponse resp) {
-        try {
-            HttpServletRequest request = (HttpServletRequest) req;
-            HttpServletResponse response = (HttpServletResponse) resp;
-            try {
-                request.getRequestDispatcher("/unauthorized").forward(request,response);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    /**
-     * 对跨域提供支持
-     */
-    /*@Override
-    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
-        // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
-        if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
-            httpServletResponse.setStatus(HttpStatus.OK.value());
-            return false;
-        }
-        return super.preHandle(request, response);
-    }*/
-
-
-
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        System.out.println("onAccessDenied...");
-        // 检查请求头中是否存在token
-        HttpServletRequest request1 = (HttpServletRequest) request;
-        String token = request1.getHeader("token");
-        // 如果token为空 说明没有认证
-        if(StringUtils.isEmpty(token)){
-            onLoginFail(response);
+    protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        log.warn("onAccessDenied 方法被调用");
+        //这个地方和前端约定，要求前端将jwtToken放在请求的Header部分
+
+        //所以以后发起请求的时候就需要在Header中放一个Authorization，值就是对应的Token
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String token = request.getHeader("authorization");
+        if(token == null){
+            onLoginFail(servletResponse);
             //调用下面的方法向客户端返回错误信息
             return false;
         }
-        // 对该token进行认证
+        log.info("请求的 Header 中藏有 token --> {}", token);
         JwtToken jwtToken = new JwtToken(token);
-        // 获取要认证的主题
-        Subject subject = SecurityUtils.getSubject();
-        // 发起对主体的认证
-        subject.login(jwtToken);
+        /*
+         * 下面就是固定写法
+         * */
+        try {
+            // 委托 realm 进行登录认证
+            //所以这个地方最终还是调用JwtRealm进行的认证
+            getSubject(servletRequest, servletResponse).login(jwtToken);
+            //也就是subject.login(token)
+        } catch (Exception e) {
+            e.printStackTrace();
+            onLoginFail(servletResponse);
+            //调用下面的方法向客户端返回错误信息
+            return false;
+        }
+
         return true;
+        //执行方法中没有抛出异常就表示登录成功
     }
 
     //登录失败时默认返回 401 状态码
     private void onLoginFail(ServletResponse response) throws IOException {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setContentType("text/html;charset=utf-8");
         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        httpResponse.getWriter().write("login error");
+        httpResponse.getWriter().write("login error 请先登录");
     }
 }

@@ -6,7 +6,10 @@ import cn.minalz.model.Permission;
 import cn.minalz.model.Role;
 import cn.minalz.model.User;
 import cn.minalz.utils.JwtUtil;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,6 +31,11 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     private UserRepository scmciwhUserRepository;
+
+    /*@Override
+    public Class getAuthenticationTokenClass() {
+        return JwtToken.class;
+    }*/
 
     /**
      * 大坑！，必须重写此方法，不然Shiro会报错
@@ -70,19 +79,24 @@ public class MyRealm extends AuthorizingRealm {
         //token是封装好的用户提交的用户名密码
         JwtToken jwtToken = (JwtToken) auth;
         String token = (String)jwtToken.getPrincipal();
+        if(token == null){
+            return null;
+        }
         Map<String, Object> tokenMap = JwtUtil.validateToken(token);
-        User user1 = (User)tokenMap.get("user");
+//        User user1 = (User)tokenMap.get("user");
         String username = (String)tokenMap.get("username");
         //获取用户
-        User user = scmciwhUserRepository.findByUsername(username);
-        if(user == null){
+        Optional<User> topByUsername = scmciwhUserRepository.findTopByUsername(username);
+        if(!topByUsername.isPresent()){
             return null;
         }else{
+            User user = topByUsername.get();
             //封装AuthenticationInfo
 //            ByteSource bsSalt = new SimpleByteSource(user.getPrivateSalt());
 //            new MySimpleByteSource(salt)
 //            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(token, token, getName());
-            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user,user.getPassword(),null,getName());
+//            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user,user.getPassword(),null,getName());
+            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(token,token,null,getName());
             return authenticationInfo;
         }
     }

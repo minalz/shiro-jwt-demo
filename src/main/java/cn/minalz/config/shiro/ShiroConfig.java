@@ -9,9 +9,12 @@ import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -40,7 +43,7 @@ public class ShiroConfig {
         myRealm.setAuthenticationCachingEnabled(false);
         myRealm.setAuthenticationCacheName("authen");
         //设置缓存管理器
-        myRealm.setCacheManager(cacheManager());
+//        myRealm.setCacheManager(cacheManager());
         return myRealm;
     }
 
@@ -52,7 +55,7 @@ public class ShiroConfig {
 //        securityManager.setRememberMeManager(rememberMeManager());
         // 设置其使用的 Realm
         securityManager.setRealm(this.realm());
-//        securityManager.setSessionManager(sessionManager());
+        securityManager.setSessionManager(sessionManager());
 
         // 关闭 ShiroDAO 功能
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
@@ -103,6 +106,31 @@ public class ShiroConfig {
         MyRedisCacheManager cacheManager = new MyRedisCacheManager();
 
         return cacheManager;
+    }
+
+    /**
+     * 自定义会话管理器
+     * @return
+     */
+    @Bean
+    public SessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        //是否开启定时调度器进行检测过期session 默认为true
+        sessionManager.setSessionValidationSchedulerEnabled(false);
+
+        return sessionManager;
+    }
+
+    /**
+     * session会话验证调度器
+     * @return session会话验证调度器
+     */
+    @Bean
+    public ExecutorServiceSessionValidationScheduler configSessionValidationScheduler() {
+        ExecutorServiceSessionValidationScheduler sessionValidationScheduler = new ExecutorServiceSessionValidationScheduler();
+        //设置session的失效扫描间隔，单位为毫秒
+        sessionValidationScheduler.setInterval(20*1000);
+        return sessionValidationScheduler;
     }
 
     /**

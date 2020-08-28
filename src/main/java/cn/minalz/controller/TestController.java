@@ -29,6 +29,7 @@ public class TestController {
     }
 
     @PostMapping("/normal")
+//    @RequiresRoles("GLDP") // 加了这个注解 MyRealm中的授权就可以执行了
     public String normal() {
         return "我是普通用户";
     }

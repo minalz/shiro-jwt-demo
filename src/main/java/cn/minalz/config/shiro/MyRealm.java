@@ -32,16 +32,14 @@ public class MyRealm extends AuthorizingRealm {
     @Autowired
     private UserRepository scmciwhUserRepository;
 
-    /*@Override
-    public Class getAuthenticationTokenClass() {
-        return JwtToken.class;
-    }*/
-
-    /**
-     * 大坑！，必须重写此方法，不然Shiro会报错
-     */
+    /*
+     * 多重写一个support
+     * 标识这个Realm是专门用来验证JwtToken
+     * 不负责验证其他的token（UsernamePasswordToken）
+     * */
     @Override
     public boolean supports(AuthenticationToken token) {
+        //这个token就是从过滤器中传入的jwtToken
         return token instanceof JwtToken;
     }
 

@@ -1,7 +1,7 @@
 package cn.minalz.controller;
 
 import cn.minalz.dao.UserRepository;
-import cn.minalz.model.User;
+import cn.minalz.model.ScmciwhUser;
 import cn.minalz.utils.Common;
 import cn.minalz.utils.JwtUtil;
 import org.apache.shiro.SecurityUtils;
@@ -72,12 +72,12 @@ public class LoginController {
         if (subject.getPrincipal() != null) {
             return "你已经登陆账号：" + subject.getPrincipal();
         }
-        Optional<User> topByUsername = scmciwhUserRepository.findTopByUsername(username);
+        Optional<ScmciwhUser> topByUsername = scmciwhUserRepository.findByUsername(username);
         // 两个提示都一样 可以让用户不知道到底是账号还是密码错误 一定程度可以迷惑恶意攻击者
         if(!topByUsername.isPresent()){
             return "登录账号密码错误";
         }
-        User user = topByUsername.get();
+        ScmciwhUser user = topByUsername.get();
         password = Common.getMD5(password);
         if(!user.getPassword().equals(password)){
             return "登录账号密码错误";
@@ -108,15 +108,15 @@ public class LoginController {
     }
 
     @GetMapping("/login_success")
-//    @ResponseBody
+    @ResponseBody
     public String loginSuccess() {
-        return "index.html";
+        return "登录成功";
     }
 
     @GetMapping("/unauthorized")
-//    @ResponseBody
+    @ResponseBody
     public String unauthorized() {
-        return "unauthorized.html";
+        return "无权限403";
     }
 
 }

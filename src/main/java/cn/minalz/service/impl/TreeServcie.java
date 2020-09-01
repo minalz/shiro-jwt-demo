@@ -2,7 +2,7 @@ package cn.minalz.service.impl;
 
 import cn.minalz.dao.PermissionRepository;
 import cn.minalz.dto.TreeNode;
-import cn.minalz.model.Permission;
+import cn.minalz.model.ScmciwhPermission;
 import cn.minalz.service.ITreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +21,11 @@ public class TreeServcie implements ITreeService {
 
     @Override
     public TreeNode getById(Long id){
-        Optional<Permission> byId = permissionRepository.findById(id);
+        Optional<ScmciwhPermission> byId = permissionRepository.findById(id);
         if(!byId.isPresent()){
             return null;
         }
-        Permission permission = byId.get();
+        ScmciwhPermission permission = byId.get();
         TreeNode treeNode = new TreeNode();
         transferTreeNode(permission, treeNode);
         return treeNode;
@@ -69,7 +69,7 @@ public class TreeServcie implements ITreeService {
     @Override
     public List<TreeNode> getChildrenById(Long id) {
 //        List<Permission> permissions = permissionRepository.findByParentId(id);
-        List<Permission> permissions = permissionRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+        List<ScmciwhPermission> permissions = permissionRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
             // 如果path和ID相等，说明这是一个root节点
             // 那么条件就是id不等于传输进来的值 但是parentI的需要等于传进来的值
@@ -104,7 +104,7 @@ public class TreeServcie implements ITreeService {
      * Permission属性转TreeNode属性
      * @return
      */
-    private void transferTreeNode(Permission permission, TreeNode treeNode){
+    private void transferTreeNode(ScmciwhPermission permission, TreeNode treeNode){
         if(permission == null)
             return;
         treeNode.setId(permission.getId());

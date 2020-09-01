@@ -4,9 +4,9 @@ import cn.minalz.dao.PermissionRepository;
 import cn.minalz.dao.RoleRepository;
 import cn.minalz.dao.UserRepository;
 import cn.minalz.dto.TreeNode;
-import cn.minalz.model.Permission;
-import cn.minalz.model.Role;
-import cn.minalz.model.User;
+import cn.minalz.model.ScmciwhPermission;
+import cn.minalz.model.ScmciwhRole;
+import cn.minalz.model.ScmciwhUser;
 import cn.minalz.service.ITreeService;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class ShiroJwtDemoApplicationTests {
     public void test1(){
 //        List<ScmciwhUserModel> all = scmciwhUserRepository.findAll();
 //        Object o = JSON.toJSON(all);
-        User scmciwhUserModel = userRepository.findById(1l).get();
+        ScmciwhUser scmciwhUserModel = userRepository.findById(1l).get();
         Object o = JSON.toJSON(scmciwhUserModel);
         System.out.println(o);
         System.out.println("--------------");
@@ -49,7 +49,7 @@ public class ShiroJwtDemoApplicationTests {
 
     @Test
     public void test2(){
-        List<Permission> all = permissionRepository.findAll();
+        List<ScmciwhPermission> all = permissionRepository.findAll();
         Object o = JSON.toJSON(all);
         System.out.println(o);
     }
@@ -66,7 +66,7 @@ public class ShiroJwtDemoApplicationTests {
 
     @Test
     public void test4(){
-        List<Role> all = roleRepository.findAll();
+        List<ScmciwhRole> all = roleRepository.findAll();
         Object o = JSON.toJSON(all);
         System.out.println(o);
     }

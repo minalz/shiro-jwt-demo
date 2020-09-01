@@ -1,6 +1,7 @@
 package cn.minalz.controller;
 
 import cn.minalz.dao.UserRepository;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +25,20 @@ public class TestController {
     }
 
     @PostMapping("/admin")
+    @RequiresRoles("CJGLY")
     public Object admin() {
         return "我是管理员";
     }
 
     @PostMapping("/normal")
-//    @RequiresRoles("GLDP") // 加了这个注解 MyRealm中的授权就可以执行了
+    @RequiresRoles("GLDP") // 加了这个注解 MyRealm中的授权就可以执行了
     public String normal() {
         return "我是普通用户";
+    }
+
+    @PostMapping("/normal2")
+    public String normal2() {
+        return "我是普通用户2";
     }
 
 }

@@ -17,7 +17,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "scmciwh_role")
-public class Role implements Serializable {
+public class ScmciwhRole implements Serializable {
     private static final long serialVersionUID = -4129171581027714951L;
     // 主键ID
     @Id
@@ -51,12 +51,12 @@ public class Role implements Serializable {
     private Date createTime;
 
     // 权限集合
-    @OneToMany(targetEntity = Permission.class,cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = ScmciwhPermission.class,cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinTable(name = "scmciwh_role_permission",
             //joinColumns,当前对象在中间表中的外键
             joinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")},
             //inverseJoinColumns，对方对象在中间表的外键
             inverseJoinColumns = {@JoinColumn(name = "permission_id",referencedColumnName = "id")}
     )
-    private Set<Permission> permissions = new HashSet<>();
+    private Set<ScmciwhPermission> permissions = new HashSet<>();
 }

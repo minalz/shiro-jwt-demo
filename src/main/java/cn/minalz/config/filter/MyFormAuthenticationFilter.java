@@ -1,7 +1,7 @@
 package cn.minalz.config.filter;
 
-import cn.minalz.model.Role;
-import cn.minalz.model.User;
+import cn.minalz.model.ScmciwhRole;
+import cn.minalz.model.ScmciwhUser;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -40,8 +40,8 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
             contextRelative = false;
         }
 
-        User user = (User) subject.getPrincipal();
-        Set<Role> roles = user.getRoles();
+        ScmciwhUser user = (ScmciwhUser) subject.getPrincipal();
+        Set<ScmciwhRole> roles = user.getRoles();
         roles.forEach(x -> {
             x.getPermissions();
         });

@@ -5,12 +5,6 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,15 +33,13 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
      */
     private RedisUtil redisUtil;
 
-
-
     /**
      * 存储key的redis.list的key值
      */
     private String keyListKey;
 
 
-    public ShiroRedisCache(String name, RedisTemplate redisTemplate, RedisUtil redisUtil) {
+    public ShiroRedisCache(String name, RedisUtil redisUtil) {
         this.name = name;
         this.redisUtil = redisUtil;
         this.keyListKey = REDIS_SHIRO_CACHE_KEY_PREFIX + name;

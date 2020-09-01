@@ -3,21 +3,16 @@ package cn.minalz.config.shiro;
 import cn.minalz.config.filter.JWTFilter;
 import cn.minalz.config.filter.MyLogoutFilter;
 import cn.minalz.config.jwt.JwtDefaultSubjectFactory;
+import cn.minalz.config.jwt.UrlPermissionResolver;
 import cn.minalz.dao.UserRepository;
-import org.apache.shiro.cache.CacheManager;
+import cn.minalz.utils.RedisUtil;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,25 +20,36 @@ import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 执行流程：
+ * 1. 客户端发起请求，shiro的过滤器生效，判断是否是login或logout的请求   如果是就直接执行请求   如果不是就进入JwtFilter
+ * 2. JwtFilter执行流程
+ * 2.1. 获取header是否有"Authorization"的键，有就获取，没有就抛出异常
+ * 2.2. 将获取的jwt字符串封装在创建的JwtToken中，使用subject执行login()方法进行校验。这个方法会调用创建的JwtRealm
+ * 2.3. 执行JwtRealm中的认证方法，使用validateToken(token)判断是否登录过
+ * 2.4. 返回true就使基础执行下去
+ */
 @Configuration
+@AutoConfigureAfter(ShiroLifecycleBeanPostProcessorConfig.class)
 public class ShiroConfig {
 
     @Autowired
     private UserRepository scmciwhUserRepository;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     @Bean
     public Realm realm() {
         MyRealm myRealm = new MyRealm();
-        //告诉realm密码匹配方式
-//        myRealm.setCredentialsMatcher(myCredentialsMatcher());
+        myRealm.setPermissionResolver(new UrlPermissionResolver());
         //开启授权信息的缓存，默认开启
         myRealm.setAuthorizationCachingEnabled(true);
         myRealm.setAuthorizationCacheName("author");
         //开启认证信息的缓存，默认关闭，key是UserNamePasswordToken，value就是principle
         myRealm.setAuthenticationCachingEnabled(false);
         myRealm.setAuthenticationCacheName("authen");
-        //设置缓存管理器
-//        myRealm.setCacheManager(cacheManager());
+
         return myRealm;
     }
 
@@ -51,11 +57,8 @@ public class ShiroConfig {
     public DefaultWebSecurityManager securityManager() {
         // 创建 DefaultWebSecurityManager 对象
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 配置 rememberMeCookie 查看源码可以知道，这里的rememberMeManager就仅仅是一个赋值，所以先执行
-//        securityManager.setRememberMeManager(rememberMeManager());
         // 设置其使用的 Realm
         securityManager.setRealm(this.realm());
-        securityManager.setSessionManager(sessionManager());
 
         // 关闭 ShiroDAO 功能
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
@@ -66,6 +69,8 @@ public class ShiroConfig {
         securityManager.setSubjectDAO(subjectDAO);
         //禁止Subject的getSession方法
         securityManager.setSubjectFactory(new JwtDefaultSubjectFactory());
+        //设置缓存管理器
+        securityManager.setCacheManager(new MyRedisCacheManager(redisUtil));
         return securityManager;
     }
 
@@ -89,48 +94,6 @@ public class ShiroConfig {
         filterFactoryBean.setFilterChainDefinitionMap(this.filterChainDefinitionMap());
 
         return filterFactoryBean;
-    }
-
-    /**
-     * 配置自定义的加密方式
-     * @return
-     */
-    @Bean
-    public MyCredentialsMatcher myCredentialsMatcher() {
-        return new MyCredentialsMatcher();
-    }
-
-    //缓存管理
-    @Bean
-    public CacheManager cacheManager(){
-        MyRedisCacheManager cacheManager = new MyRedisCacheManager();
-
-        return cacheManager;
-    }
-
-    /**
-     * 自定义会话管理器
-     * @return
-     */
-    @Bean
-    public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        //是否开启定时调度器进行检测过期session 默认为true
-        sessionManager.setSessionValidationSchedulerEnabled(false);
-
-        return sessionManager;
-    }
-
-    /**
-     * session会话验证调度器
-     * @return session会话验证调度器
-     */
-    @Bean
-    public ExecutorServiceSessionValidationScheduler configSessionValidationScheduler() {
-        ExecutorServiceSessionValidationScheduler sessionValidationScheduler = new ExecutorServiceSessionValidationScheduler();
-        //设置session的失效扫描间隔，单位为毫秒
-        sessionValidationScheduler.setInterval(20*1000);
-        return sessionValidationScheduler;
     }
 
     /**
@@ -162,24 +125,6 @@ public class ShiroConfig {
         // 配置自定义的shiro注销过滤器
         filtersMap.put("logout", new MyLogoutFilter());
         return filtersMap;
-    }
-
-    /**
-     * 注解支持
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator defaultAAP = new DefaultAdvisorAutoProxyCreator();
-        defaultAAP.setProxyTargetClass(true);
-        return defaultAAP;
-    }
-
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
     }
 
 }

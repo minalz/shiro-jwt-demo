@@ -25,17 +25,17 @@
         </dependency>
 
         <!-- 实现对 Shiro 的自动化配置 -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-starter</artifactId>
             <version>1.4.2</version>
-        </dependency>
+        </dependency>-->
         <!--由于需要对shiro的SecurityManager进行设置，所以不能使用shiro-spring-boot-starter进行与springboot的整合，只能使用spring-shiro-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
             <version>1.5.2</version>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

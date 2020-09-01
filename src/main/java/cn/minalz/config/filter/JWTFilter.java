@@ -2,6 +2,7 @@ package cn.minalz.config.filter;
 
 import cn.minalz.config.jwt.JwtToken;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
 import javax.servlet.ServletRequest;
@@ -24,7 +25,10 @@ public class JWTFilter extends AccessControlFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
         log.warn("isAccessAllowed 方法被调用");
-        //这里先让它始终返回false来使用onAccessDenied()方法
+//        Subject subject = getSubject(request,response);
+//        String url = getPathWithinApplication(request);
+//        log.info("当前用户正在访问的 url => " + url);
+//        return subject.isPermitted(url);
         return false;
     }
 
@@ -40,7 +44,7 @@ public class JWTFilter extends AccessControlFilter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = request.getHeader("authorization");
         if(token == null){
-            onLoginFail(servletResponse);
+            onLoginFail401(servletResponse);
             //调用下面的方法向客户端返回错误信息
             return false;
         }
@@ -52,11 +56,20 @@ public class JWTFilter extends AccessControlFilter {
         try {
             // 委托 realm 进行登录认证
             //所以这个地方最终还是调用JwtRealm进行的认证
-            getSubject(servletRequest, servletResponse).login(jwtToken);
-            //也就是subject.login(token)
+            Subject subject = getSubject(servletRequest,servletResponse);
+            subject.login(jwtToken);
+            // 方法级别的url的权限校验
+            /*String url = getPathWithinApplication(request);
+            log.info("当前用户正在访问的 url => " + url);
+            boolean permitted = subject.isPermitted(url);
+            if(!permitted){
+                onLoginFail403(servletResponse);
+                return false;
+            }*/
+            // 方法级别的url的权限校验
         } catch (Exception e) {
             e.printStackTrace();
-            onLoginFail(servletResponse);
+            onLoginFail401(servletResponse);
             //调用下面的方法向客户端返回错误信息
             return false;
         }
@@ -66,10 +79,18 @@ public class JWTFilter extends AccessControlFilter {
     }
 
     //登录失败时默认返回 401 状态码
-    private void onLoginFail(ServletResponse response) throws IOException {
+    private void onLoginFail401(ServletResponse response) throws IOException {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setContentType("text/html;charset=utf-8");
         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpResponse.getWriter().write("login error 请先登录");
+    }
+
+    //登录失败时默认返回 403 状态码
+    private void onLoginFail403(ServletResponse response) throws IOException {
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setContentType("text/html;charset=utf-8");
+        httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        httpResponse.getWriter().write("没有权限访问该接口");
     }
 }

@@ -7,6 +7,7 @@ import cn.minalz.model.ScmciwhRole;
 import cn.minalz.model.ScmciwhUser;
 import cn.minalz.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -64,7 +65,9 @@ public class MyRealm extends AuthorizingRealm {
         Set<String> permissionsSet = new HashSet<>();
         roles.forEach(x -> {
             Set<ScmciwhPermission> permissions = x.getPermissions();
-            Set<String> perms = permissions.stream().map(ScmciwhPermission::getUrl).collect(Collectors.toSet());
+            Set<String> perms = permissions.stream().filter(p -> {
+                return StringUtils.isNotEmpty(p.getUrl());
+            }).map(ScmciwhPermission::getUrl).collect(Collectors.toSet());
             permissionsSet.addAll(perms);
         });
         if(permissionsSet != null && permissionsSet.size() > 0){
@@ -87,10 +90,9 @@ public class MyRealm extends AuthorizingRealm {
             return null;
         }
         Map<String, Object> tokenMap = JwtUtil.validateToken(token);
-//        User user1 = (User)tokenMap.get("user");
         String username = (String)tokenMap.get("username");
         //获取用户
-        Optional<ScmciwhUser> topByUsername = scmciwhUserRepository.findByUsername(username);
+        Optional<ScmciwhUser> topByUsername = scmciwhUserRepository.findTopByUsername(username);
         if(!topByUsername.isPresent()){
             return null;
         }else{

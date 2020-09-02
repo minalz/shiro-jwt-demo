@@ -102,11 +102,19 @@ public class ShiroConfig {
      */
     private Map<String, String> filterChainDefinitionMap() {
         Map<String, String> filterMap = new LinkedHashMap<>(); // 注意要使用有序的 LinkedHashMap ，顺序匹配
-        filterMap.put("/login", "anon"); // 允许匿名访问
-//        filterMap.put("/", "anon"); // 允许匿名访问
-//        filterMap.put("/scmciwh/admin", "roles[CJGLY]"); // 超级管理员
-//        filterMap.put("/scmciwh/normal", "roles[GLDP]"); // 需要 NORMAL 角色
-        filterMap.put("/logout", "logout"); // 退出
+        // 允许匿名访问
+        filterMap.put("/login", "anon");
+        filterMap.put("/scmciwh/status", "anon");
+        filterMap.put("/inter", "anon");
+        filterMap.put("/mail", "anon");
+        filterMap.put("/get-version-and-download-url", "anon");
+        filterMap.put("/find-function", "anon");
+        filterMap.put("swagger", "anon");
+        filterMap.put("/api-docs", "anon");
+        filterMap.put("/lx/save", "anon");
+        filterMap.put("OPTIONS", "anon");
+        // 退出
+        filterMap.put("/logout", "logout");
         filterMap.put("/**", "jwtFilter"); // 默认剩余的 URL ，需要经过认证
 //        filterMap.put("/**", "authc"); // 默认剩余的 URL ，需要经过认证
         return filterMap;

@@ -30,6 +30,20 @@ public final class RedisUtil {
     }
 
     /**
+     * 获取所有存在的key的个数
+     * @param keys
+     * @return
+     */
+    public Long count(String keys){
+        try {
+            return redisTemplate.countExistingKeys(redisTemplate.keys(keys));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0l;
+        }
+    }
+
+    /**
      * 指定缓存失效时间
      *
      * @param key  键

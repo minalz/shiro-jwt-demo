@@ -1,9 +1,12 @@
 package cn.minalz.controller;
 
+import cn.minalz.config.redis.RedisConstant;
 import cn.minalz.dao.UserRepository;
+import cn.minalz.dto.UserRedisToken;
 import cn.minalz.model.ScmciwhUser;
 import cn.minalz.utils.Common;
 import cn.minalz.utils.JwtUtil;
+import cn.minalz.utils.RedisUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -26,6 +30,9 @@ public class LoginController {
 
     @Autowired
     private UserRepository scmciwhUserRepository;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @GetMapping("/login")
     public String loginPage() {
@@ -72,7 +79,7 @@ public class LoginController {
         if (subject.getPrincipal() != null) {
             return "你已经登陆账号：" + subject.getPrincipal();
         }
-        Optional<ScmciwhUser> topByUsername = scmciwhUserRepository.findByUsername(username);
+        Optional<ScmciwhUser> topByUsername = scmciwhUserRepository.findTopByUsername(username);
         // 两个提示都一样 可以让用户不知道到底是账号还是密码错误 一定程度可以迷惑恶意攻击者
         if(!topByUsername.isPresent()){
             return "登录账号密码错误";
@@ -83,10 +90,15 @@ public class LoginController {
             return "登录账号密码错误";
         }
 
+        // 走到这里 说明账号密码是正确的了
         HashMap<String,Object> map = new HashMap<>();
         map.put("username",user.getUsername());
-//        map.put("user",scmciwhUserModel);
         String token = JwtUtil.generateToken(map);
+
+        // 生成的token应该要存储到redis中
+        UserRedisToken userRedisToken = new UserRedisToken(token,new Date().getTime());
+        redisUtil.set(RedisConstant.REDIS_STORAGE_USERNAME_PREFIX + username + "_" + token,userRedisToken,RedisConstant.REDIS_STORAGE_USERNAME_TIME);
+        logger.info("登录成功 --> 用户名：[{}] -- {}",username,userRedisToken);
 
         return token;
     }

@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<ScmciwhUser,Long>, JpaSpec
      * @param username
      * @return
      */
-    Optional<ScmciwhUser> findByUsername(String username);
+    Optional<ScmciwhUser> findTopByUsername(String username);
 
     /**
      * 查询所有对应的角色

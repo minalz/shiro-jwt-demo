@@ -1,5 +1,6 @@
 package cn.minalz.utils;
 
+import cn.minalz.config.redis.RedisConstant;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -13,7 +14,8 @@ public class JwtUtil {
     public static String generateToken(HashMap<String, Object> map) {
         String jwt = Jwts.builder()
                 .setClaims(map)
-                .setExpiration(new Date(System.currentTimeMillis() + 3600_000_000L))// 1000 hour
+//                .setExpiration(new Date(System.currentTimeMillis() + 3600_000_000L))// 1000 hour
+                .setExpiration(new Date(System.currentTimeMillis() + RedisConstant.TOKEN_STORAGE_USERNAME_TIME)) // 和Redis中的时间保持一致
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
         return "Bearer "+jwt; //jwt前面一般都会加Bearer

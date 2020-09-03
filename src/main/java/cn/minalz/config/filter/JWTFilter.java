@@ -38,8 +38,8 @@ public class JWTFilter extends AccessControlFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
         log.warn("isAccessAllowed 方法被调用");
 //        Subject subject = getSubject(request,response);
-//        String url = getPathWithinApplication(request);
-//        log.info("当前用户正在访问的 url => " + url);
+        String url = getPathWithinApplication(request);
+        log.info("当前用户正在访问的 url ==> {}", url);
 //        return subject.isPermitted(url);
         return false;
     }
@@ -96,14 +96,6 @@ public class JWTFilter extends AccessControlFilter {
         httpResponse.setContentType("text/html;charset=utf-8");
         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpResponse.getWriter().write("login error 请先登录");
-    }
-
-    //登录失败时默认返回 403 状态码
-    private void onLoginFail403(ServletResponse response) throws IOException {
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        httpResponse.setContentType("text/html;charset=utf-8");
-        httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        httpResponse.getWriter().write("没有权限访问该接口");
     }
 
 }

@@ -85,7 +85,7 @@ public class ShiroConfig {
         // <3> 设置 URL 们
         filterFactoryBean.setLoginUrl("/login"); // 登陆 URL
 //        filterFactoryBean.setSuccessUrl("/login_success"); // 登陆成功 URL
-//        filterFactoryBean.setUnauthorizedUrl("/unauthorized"); // 无权限 URL
+        filterFactoryBean.setUnauthorizedUrl("/unauthorized"); // 无权限 URL
 
         // 添加自定义的shiro注销过滤器
         filterFactoryBean.setFilters(myFilters());
@@ -114,7 +114,7 @@ public class ShiroConfig {
         filterMap.put("/lx/save", "anon");
         filterMap.put("OPTIONS", "anon");
         // 退出
-        filterMap.put("/logout", "logout");
+//        filterMap.put("/logout", "logout");
         filterMap.put("/**", "jwtFilter"); // 默认剩余的 URL ，需要经过认证
 //        filterMap.put("/**", "authc"); // 默认剩余的 URL ，需要经过认证
         return filterMap;

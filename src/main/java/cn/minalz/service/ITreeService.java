@@ -24,12 +24,6 @@ public interface ITreeService {
     public TreeNode getTreeById(Long id);
 
     /**
-     * 根据id获取对应的权限数据(多树)
-     * @param id
-     * @return
-     */
-    public List<TreeNode> getTreesById(Long id);
-    /**
      * 根据父id获取对应的子node
      * @param id
      * @return

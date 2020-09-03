@@ -14,7 +14,7 @@ import java.util.*;
  * 生成权限树的工具类
  */
 @Service
-public class TreeServcie implements ITreeService {
+public class TreeServcieImpl implements ITreeService {
 
     @Autowired
     private PermissionRepository permissionRepository;
@@ -33,37 +33,8 @@ public class TreeServcie implements ITreeService {
 
     @Override
     public TreeNode getTreeById(Long id) {
-//        Optional<Permission> byId = permissionRepository.findById(id);
-//        if (!byId.isPresent())
-//            return null;
-//        Permission permission = byId.get();
-//        List<Permission> permissions = permissionRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
-//            List<Predicate> predicates = new LinkedList<>();
-//            String path = permission.getPath();
-//            Long id1 = permission.getId();
-//            if(path.equals(String.valueOf(id1))){
-//                // 如果path和ID相等，说明这是一个root节点
-//                predicates.add(criteriaBuilder.like(root.get("path"), path + "," + "%"));
-//            }else{
-//                predicates.add(criteriaBuilder.like(root.get("path"), path + "," + id1 + "%"));
-//            }
-//            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-//        });
-//        if(permissions.size()==0)
-//            return null;
-//        List<TreeNode> nodes = new ArrayList<>();
-//        permissions.forEach(x -> {
-//            TreeNode treeNode = new TreeNode();
-//            transferTreeNode(x, treeNode);
-//            nodes.add(treeNode);
-//        });
         TreeNode treeNode = generateTreeNode(id);
         return treeNode;
-    }
-
-    @Override
-    public List<TreeNode> getTreesById(Long id) {
-        return null;
     }
 
     @Override

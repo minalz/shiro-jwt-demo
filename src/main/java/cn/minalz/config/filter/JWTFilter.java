@@ -54,7 +54,7 @@ public class JWTFilter extends AccessControlFilter {
 
         //所以以后发起请求的时候就需要在Header中放一个Authorization，值就是对应的Token
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String token = request.getHeader("authorization");
+        String token = request.getHeader("Authorization");
         if(token == null){
             onLoginFail401(servletResponse);
             //调用下面的方法向客户端返回错误信息

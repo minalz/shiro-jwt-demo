@@ -27,4 +27,9 @@ public interface UserRepository extends JpaRepository<ScmciwhUser,Long>, JpaSpec
      */
     List<ScmciwhUser> findRolesByUsername(String username);
 
+    /**
+     * 根据用户ID查询对应的用户信息
+     */
+    Optional<ScmciwhUser> findTopById(Long id);
+
 }

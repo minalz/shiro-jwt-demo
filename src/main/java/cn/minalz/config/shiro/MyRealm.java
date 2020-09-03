@@ -49,7 +49,7 @@ public class MyRealm extends AuthorizingRealm {
     //获取权限信息的方法
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("走了权限查询方法");
+        log.info("doGetAuthorizationInfo 权限查询方法被调用");
         //获取用户名
         //此Principal就是彼Principal（认证时构造的）
         ScmciwhUser user = (ScmciwhUser)principals.getPrimaryPrincipal();
@@ -83,6 +83,7 @@ public class MyRealm extends AuthorizingRealm {
     //获取认证信息的方法
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
+        log.info("doGetAuthenticationInfo 证方法被调用");
         //token是封装好的用户提交的用户名密码
         JwtToken jwtToken = (JwtToken) auth;
         String token = (String)jwtToken.getPrincipal();

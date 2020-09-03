@@ -113,6 +113,14 @@ public class ShiroConfig {
         filterMap.put("/api-docs", "anon");
         filterMap.put("/lx/save", "anon");
         filterMap.put("OPTIONS", "anon");
+        // 放开swagger的访问
+        /*filterMap.put("/swagger-ui.html/**", "anon");
+        filterMap.put("/swagger/**", "anon");
+        filterMap.put("/swagger-resources/**", "anon");
+        filterMap.put("/v2/**", "anon");
+        filterMap.put("/webjars/**", "anon");
+        filterMap.put("/configuration/**", "anon");*/
+        // 放开swagger的访问
         // 退出
 //        filterMap.put("/logout", "logout");
         filterMap.put("/**", "jwtFilter"); // 默认剩余的 URL ，需要经过认证

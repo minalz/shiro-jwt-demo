@@ -25,7 +25,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public ScmciwhRole savePermission(ScmciwhRole role) {
+    public ScmciwhRole saveRole(ScmciwhRole role) {
         return roleRepository.save(role);
     }
 

@@ -19,7 +19,7 @@ public interface IRoleService {
      * 根据角色实体增加/更新
      * @param role
      */
-    public ScmciwhRole savePermission(ScmciwhRole role);
+    public ScmciwhRole saveRole(ScmciwhRole role);
 
     /**
      * 根据角色ID删除对应的单条数据

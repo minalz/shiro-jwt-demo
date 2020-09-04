@@ -11,7 +11,7 @@ public interface IUserService {
      * 根据角色实体增加/更新
      * @param user
      */
-    public ScmciwhUser savePermission(ScmciwhUser user);
+    public ScmciwhUser saveUser(ScmciwhUser user);
 
     /**
      * 根据角色ID删除对应的单条数据

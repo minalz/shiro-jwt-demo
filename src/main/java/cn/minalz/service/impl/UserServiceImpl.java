@@ -20,7 +20,7 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Override
-    public ScmciwhUser savePermission(ScmciwhUser user) {
+    public ScmciwhUser saveUser(ScmciwhUser user) {
         return userRepository.save(user);
     }
 

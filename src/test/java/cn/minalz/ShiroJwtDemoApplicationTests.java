@@ -128,4 +128,12 @@ public class ShiroJwtDemoApplicationTests {
         System.out.println("o -- " + o);
     }
 
+    @Test
+    public void test7(){
+        ScmciwhPermission permission = permissionService.findById(12l);
+        permission.setPath(permission.getPath()+"test");
+        permissionService.savePermission(permission);
+//        permissionService.deleteById(12l);
+    }
+
 }

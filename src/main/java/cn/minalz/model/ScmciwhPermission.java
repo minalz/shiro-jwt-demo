@@ -14,7 +14,7 @@ import java.util.Date;
  **/
 @Data
 @Entity
-@Table(name = "scmciwh_permission")
+@Table(name = "scmciwh_permission_auth")
 public class ScmciwhPermission implements Serializable {
     private static final long serialVersionUID = 6010454579839336209L;
     // 主键ID

@@ -16,7 +16,7 @@ import java.util.Set;
  **/
 @Data
 @Entity
-@Table(name = "scmciwh_user")
+@Table(name = "scmciwh_user_auth")
 public class ScmciwhUser implements Serializable {
 
     private static final long serialVersionUID = -4769892525769964176L;
@@ -64,7 +64,7 @@ public class ScmciwhUser implements Serializable {
 
     // 角色集合
     @OneToMany(targetEntity = ScmciwhRole.class,cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
-    @JoinTable(name = "scmciwh_user_role",
+    @JoinTable(name = "scmciwh_user_role_auth",
             //joinColumns,当前对象在中间表中的外键
             joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "id")},
             //inverseJoinColumns，对方对象在中间表的外键
@@ -74,7 +74,7 @@ public class ScmciwhUser implements Serializable {
 
     // 工厂集合
     @OneToMany(targetEntity = ScmciwhWerk.class,cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
-    @JoinTable(name = "scmciwh_user_werk",
+    @JoinTable(name = "scmciwh_user_werk_auth",
             //joinColumns,当前对象在中间表中的外键
             joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "id")},
             //inverseJoinColumns，对方对象在中间表的外键

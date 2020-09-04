@@ -14,7 +14,7 @@ import java.util.Date;
  **/
 @Data
 @Entity
-@Table(name = "scmciwh_werk")
+@Table(name = "scmciwh_werk_auth")
 public class ScmciwhWerk implements Serializable {
     private static final long serialVersionUID = -8555405122218479323L;
     // 主键ID

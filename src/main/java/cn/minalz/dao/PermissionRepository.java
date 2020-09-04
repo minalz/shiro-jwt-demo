@@ -25,4 +25,5 @@ public interface PermissionRepository extends JpaRepository<ScmciwhPermission,Lo
      * @return
      */
     List<ScmciwhPermission> findByPath(Long id);
+
 }

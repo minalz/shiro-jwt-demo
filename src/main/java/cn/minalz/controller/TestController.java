@@ -43,10 +43,31 @@ public class TestController {
         return responseData;
     }
 
+    @PostMapping("/normal1")
+    public ResponseData normal1() {
+        ResponseData responseData = new ResponseData();
+        responseData.msg = "我是普通用户1";
+        return responseData;
+    }
+
     @PostMapping("/normal2")
     public ResponseData normal2() {
         ResponseData responseData = new ResponseData();
         responseData.msg = "我是普通用户2";
+        return responseData;
+    }
+
+    @PostMapping("/normal3")
+    public ResponseData normal3() {
+        ResponseData responseData = new ResponseData();
+        responseData.msg = "我是普通用户3";
+        return responseData;
+    }
+
+    @PostMapping("/normal4")
+    public ResponseData normal4() {
+        ResponseData responseData = new ResponseData();
+        responseData.msg = "我是普通用户4";
         return responseData;
     }
 

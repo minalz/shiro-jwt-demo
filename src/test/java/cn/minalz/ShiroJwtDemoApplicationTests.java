@@ -1,5 +1,6 @@
 package cn.minalz;
 
+import cn.minalz.common.ResponseData;
 import cn.minalz.config.redis.RedisConstant;
 import cn.minalz.dao.PermissionRepository;
 import cn.minalz.dao.RoleRepository;
@@ -9,6 +10,7 @@ import cn.minalz.dto.UserRedisToken;
 import cn.minalz.model.ScmciwhPermission;
 import cn.minalz.model.ScmciwhRole;
 import cn.minalz.model.ScmciwhUser;
+import cn.minalz.service.IPermissionService;
 import cn.minalz.service.ITreeService;
 import cn.minalz.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
@@ -28,6 +30,8 @@ public class ShiroJwtDemoApplicationTests {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private IPermissionService permissionService;
     @Autowired
     private PermissionRepository permissionRepository;
     @Autowired
@@ -59,14 +63,16 @@ public class ShiroJwtDemoApplicationTests {
         System.out.println(o);
     }
 
+    /**
+     * 查询所有权限数据(所有根节点的权限数据，多数)
+     */
     @Test
     public void test3(){
-        TreeNode treeById = treeService.getTreeById(6l);
-        TreeNode treeById2 = treeService.getTreeById(7l);
-        Object o = JSON.toJSON(treeById);
-        Object o2 = JSON.toJSON(treeById2);
-        System.out.println(o);
-        System.out.println(o2);
+        ResponseData responseData = new ResponseData();
+        List<TreeNode> treeNodes = treeService.getTrees();
+        responseData.list = treeNodes;
+        Object o = JSON.toJSON(treeNodes);
+        System.out.println("o -- " + o);
     }
 
     @Test
@@ -113,6 +119,13 @@ public class ShiroJwtDemoApplicationTests {
         Long count = redisUtil.count(RedisConstant.REDIS_STORAGE_USERNAME_PREFIX + "cjgly" + "_" + "*");
         System.out.println("count -- " + count);
 
+    }
+
+    @Test
+    public void test6(){
+        List<ScmciwhPermission> rootPermission = permissionService.findRootPermission();
+        Object o = JSON.toJSON(rootPermission);
+        System.out.println("o -- " + o);
     }
 
 }

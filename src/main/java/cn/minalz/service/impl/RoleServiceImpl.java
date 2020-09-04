@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 角色管理业务类
@@ -21,5 +22,24 @@ public class RoleServiceImpl implements IRoleService {
     public List<ScmciwhRole> findAll() {
         List<ScmciwhRole> roles = roleRepository.findAll();
         return roles;
+    }
+
+    @Override
+    public ScmciwhRole savePermission(ScmciwhRole role) {
+        return roleRepository.save(role);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        roleRepository.deleteById(id);
+    }
+
+    @Override
+    public ScmciwhRole findById(Long id) {
+        Optional<ScmciwhRole> byId = roleRepository.findById(id);
+        if (byId.isPresent()) {
+            return byId.get();
+        }
+        return null;
     }
 }

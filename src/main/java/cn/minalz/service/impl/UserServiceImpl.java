@@ -20,6 +20,16 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Override
+    public ScmciwhUser savePermission(ScmciwhUser user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
     public ScmciwhUser findById(Long id) {
         Optional<ScmciwhUser> byId = userRepository.findById(id);
         if(byId.isPresent()){

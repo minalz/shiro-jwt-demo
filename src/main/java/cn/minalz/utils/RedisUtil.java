@@ -581,4 +581,30 @@ public final class RedisUtil {
             return 0;
         }
     }
+
+    /**
+     * 获取分布式锁
+     * @return
+     */
+    public Boolean tryLock(String key){
+        Object o = this.get(key);
+        if(o != null){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 添加锁
+     */
+    public void addLock(String key, Object value, int time){
+        this.set(key, value,time);
+    }
+
+    /**
+     * 释放锁
+     */
+    public void releaseLock(String key){
+        this.del(key);
+    }
 }

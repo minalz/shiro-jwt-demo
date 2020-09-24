@@ -1,5 +1,6 @@
 package cn.minalz.controller;
 
+import cn.minalz.aspect.NoRepeatSubmit;
 import cn.minalz.common.ResponseData;
 import cn.minalz.dao.UserRepository;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -68,6 +69,14 @@ public class TestController {
     public ResponseData normal4() {
         ResponseData responseData = new ResponseData();
         responseData.msg = "我是普通用户4";
+        return responseData;
+    }
+
+    @PostMapping("/normal5")
+    @NoRepeatSubmit(lockTime = 300)
+    public ResponseData normal5() {
+        ResponseData responseData = new ResponseData();
+        responseData.msg = "我是普通用户5";
         return responseData;
     }
 

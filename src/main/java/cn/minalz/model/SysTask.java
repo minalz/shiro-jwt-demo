@@ -25,7 +25,7 @@ public class SysTask implements Serializable {
     @Column(name="bean_class")
     private String beanClass; // 任务执行时调用哪个类的方法 包名+类名
     @Column(name="job_status")
-    private String jobStatus; // 任务状
+    private String jobStatus; // 任务状态
     @Column(name="job_group")
     private String jobGroup; // 任务分
     @Column(name="create_user")

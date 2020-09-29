@@ -1,0 +1,12 @@
+INSERT INTO `scmciwh_permission_auth` VALUES (1, 'pc_base_code', 'PC基础数据', '', 6, '6,1', 0, 0, 0, NULL, 1, NULL, '2020-08-21 13:55:30', NULL, '2020-08-21 13:55:30');
+INSERT INTO `scmciwh_permission_auth` VALUES (2, 'admin_code', '管理员访问', '/scmciwh/admin', 1, '6,1,2', 0, 0, 0, NULL, 1, NULL, '2020-08-21 13:55:26', NULL, '2020-08-21 13:55:26');
+INSERT INTO `scmciwh_permission_auth` VALUES (3, 'normal_code', '普通用户访问', '/scmciwh/normal', 8, '7,8,3', 0, 0, 0, NULL, 1, NULL, '2020-09-04 10:59:30', NULL, '2020-09-04 10:59:30');
+INSERT INTO `scmciwh_permission_auth` VALUES (4, 'admin_test', '管理员下测试', '/scmciwh/admin/test', 2, '6,1,2,4', 0, 0, 0, NULL, 1, NULL, '2020-08-21 13:53:51', NULL, '2020-08-21 13:53:51');
+INSERT INTO `scmciwh_permission_auth` VALUES (5, 'normal_test', '普通用户下测试', '/scmciwh/normal/test', 3, '7,8,3,5', 0, 0, 0, NULL, 1, NULL, '2020-08-21 14:02:26', NULL, '2020-08-21 14:02:26');
+INSERT INTO `scmciwh_permission_auth` VALUES (6, 'pc_code', 'PC权限', NULL, 6, '6', 0, 0, 0, NULL, 1, NULL, '2020-09-03 15:05:49', NULL, '2020-09-03 15:05:49');
+INSERT INTO `scmciwh_permission_auth` VALUES (7, 'pda_code', 'PDA权限', NULL, 7, '7', 1, 0, 0, NULL, 1, NULL, '2020-09-03 15:05:51', NULL, '2020-09-03 15:05:51');
+INSERT INTO `scmciwh_permission_auth` VALUES (8, 'pda_base_code', 'PDA基础数据', NULL, 7, '7,8', 0, 0, 0, NULL, 1, NULL, '2020-09-03 15:06:10', NULL, '2020-09-03 15:06:10');
+INSERT INTO `scmciwh_permission_auth` VALUES (9, 'normal_code1', '普通用户访问1', '/scmciwh/normal1', 8, '7,8,9', 3, 0, 0, NULL, 1, NULL, '2020-09-04 11:00:19', NULL, '2020-09-04 11:00:19');
+INSERT INTO `scmciwh_permission_auth` VALUES (10, 'normal_code2', '普通用户访问2', '/scmciwh/normal2', 8, '7,8,10', 4, 0, 0, NULL, 1, NULL, '2020-09-04 11:00:18', NULL, '2020-09-04 11:00:18');
+INSERT INTO `scmciwh_permission_auth` VALUES (11, 'normal_code3', '普通用户访问3', '/scmciwh/normal3', 8, '7,8,11', 2, 0, 0, NULL, 1, NULL, '2020-09-04 11:00:10', NULL, '2020-09-04 11:00:10');
+INSERT INTO `scmciwh_permission_auth` VALUES (12, 'normal_code4', '普通用户访问4', '/scmciwh/normal4', 8, '7,8,12test', 1, 0, 0, NULL, 1, NULL, '2020-09-04 14:43:38', NULL, '2020-09-04 14:43:38');

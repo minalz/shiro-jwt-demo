@@ -1,0 +1,12 @@
+INSERT INTO `scmciwh_role_permission_auth` VALUES (1, 1, 1);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (2, 1, 2);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (3, 1, 4);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (4, 1, 6);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (5, 2, 7);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (6, 2, 8);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (7, 2, 3);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (8, 2, 5);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (9, 2, 9);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (10, 2, 10);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (11, 2, 11);
+INSERT INTO `scmciwh_role_permission_auth` VALUES (12, 2, 12);

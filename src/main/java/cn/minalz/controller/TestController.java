@@ -60,6 +60,7 @@ public class TestController {
     public ResponseData normal1() {
         ResponseData responseData = new ResponseData();
         responseData.msg = "我是普通用户1";
+        int a = 10/0;
         return responseData;
     }
 

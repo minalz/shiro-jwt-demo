@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author: minalz
  * @date: 2020-07-24 23:39
  **/
-public interface RoleRepository extends JpaRepository<ScmciwhRole,Long>, JpaSpecificationExecutor<ScmciwhRole> {
+public interface RoleRepository extends JpaRepository<ScmciwhRole, Long>, JpaSpecificationExecutor<ScmciwhRole> {
 
 
 }

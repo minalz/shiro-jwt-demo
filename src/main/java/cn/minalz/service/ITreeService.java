@@ -13,6 +13,7 @@ public interface ITreeService {
 
     /**
      * 根据权限id获取对应的TreeNode
+     *
      * @param id
      * @return
      */
@@ -20,6 +21,7 @@ public interface ITreeService {
 
     /**
      * 根据权限id获取对应的权限数据(单树)
+     *
      * @param id
      * @return
      */
@@ -27,12 +29,14 @@ public interface ITreeService {
 
     /**
      * 根据权限的根节点查询对应的权限数据(可能是多树，如果是多个根节点的话)
+     *
      * @return
      */
     public List<TreeNode> getTrees();
 
     /**
      * 根据父id获取对应的子node
+     *
      * @param id
      * @return
      */
@@ -40,6 +44,7 @@ public interface ITreeService {
 
     /**
      * 根据父id生成树结构(单树)
+     *
      * @param id
      * @return
      */

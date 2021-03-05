@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author: minalz
  * @date: 2020-07-24 23:39
  **/
-public interface TaskRepository extends JpaRepository<SysTask,Long>, JpaSpecificationExecutor<SysTask> {
+public interface TaskRepository extends JpaRepository<SysTask, Long>, JpaSpecificationExecutor<SysTask> {
 
 }

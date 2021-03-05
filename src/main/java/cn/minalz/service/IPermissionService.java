@@ -16,18 +16,21 @@ public interface IPermissionService {
 
     /**
      * 根据权限实体增加/更新
+     *
      * @param permission
      */
     public ScmciwhPermission savePermission(ScmciwhPermission permission);
 
     /**
      * 根据权限ID删除对应的单条数据
+     *
      * @param id
      */
     public void deleteById(Long id);
 
     /**
      * 根据权限ID查询对应的单条数据
+     *
      * @param id
      * @return
      */

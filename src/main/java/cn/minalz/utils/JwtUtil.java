@@ -18,7 +18,7 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + RedisConstant.TOKEN_STORAGE_USERNAME_TIME)) // 和Redis中的时间保持一致
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        return "Bearer "+jwt; //jwt前面一般都会加Bearer
+        return "Bearer " + jwt; //jwt前面一般都会加Bearer
     }
 
     public static Map<String, Object> validateToken(String token) {
@@ -26,26 +26,27 @@ public class JwtUtil {
             // parse the token.
             Map<String, Object> body = Jwts.parser()
                     .setSigningKey(SECRET)
-                    .parseClaimsJws(token.replace("Bearer ",""))
+                    .parseClaimsJws(token.replace("Bearer ", ""))
                     .getBody();
             return body;
-        }catch (Exception e){
-            throw new IllegalStateException("Invalid Token. "+e.getMessage());
+        } catch (Exception e) {
+            throw new IllegalStateException("Invalid Token. " + e.getMessage());
         }
     }
 
     /**
      * 获得token中的信息无需password解密也能获得
+     *
      * @return token中包含的用户名
      */
     public static String getUsername(String token) {
         // parse the token.
         Map<String, Object> body = Jwts.parser()
                 .setSigningKey(SECRET)
-                .parseClaimsJws(token.replace("Bearer ",""))
+                .parseClaimsJws(token.replace("Bearer ", ""))
                 .getBody();
         Object username = body.get("username");
-        if(username != null){
+        if (username != null) {
             return username.toString();
         }
         return null;

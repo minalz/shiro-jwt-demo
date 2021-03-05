@@ -66,10 +66,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.junit.vintage</groupId>-->
-                    <!--<artifactId>junit-vintage-engine</artifactId>-->
-                <!--</exclusion>-->
+            <!--<exclusion>-->
+            <!--<groupId>org.junit.vintage</groupId>-->
+            <!--<artifactId>junit-vintage-engine</artifactId>-->
+            <!--</exclusion>-->
             <!--</exclusions>-->
         </dependency>
 
@@ -122,11 +122,11 @@
         </dependency>
 
         <!-- 邮件功能 -->
-        <dependency >
-            <groupId >com.sun.mail </groupId >
-            <artifactId >javax.mail </artifactId >
-            <version >1.5.4 </version >
-        </dependency >
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.4</version>
+        </dependency>
 
 
     </dependencies>

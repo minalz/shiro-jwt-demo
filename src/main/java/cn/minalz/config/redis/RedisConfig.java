@@ -16,6 +16,7 @@ public class RedisConfig {
 
     /**
      * 配置RedisTemplate实例
+     *
      * @param
      * @return
      */

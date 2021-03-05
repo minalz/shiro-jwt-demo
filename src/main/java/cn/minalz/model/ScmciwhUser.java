@@ -63,22 +63,22 @@ public class ScmciwhUser implements Serializable {
     private Date createTime;
 
     // 角色集合
-    @OneToMany(targetEntity = ScmciwhRole.class,cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = ScmciwhRole.class, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinTable(name = "scmciwh_user_role_auth",
             //joinColumns,当前对象在中间表中的外键
-            joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "id")},
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             //inverseJoinColumns，对方对象在中间表的外键
-            inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")}
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     private Set<ScmciwhRole> roles = new HashSet<>();
 
     // 工厂集合
-    @OneToMany(targetEntity = ScmciwhWerk.class,cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = ScmciwhWerk.class, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinTable(name = "scmciwh_user_werk_auth",
             //joinColumns,当前对象在中间表中的外键
-            joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "id")},
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             //inverseJoinColumns，对方对象在中间表的外键
-            inverseJoinColumns = {@JoinColumn(name = "werk_id",referencedColumnName = "id")}
+            inverseJoinColumns = {@JoinColumn(name = "werk_id", referencedColumnName = "id")}
     )
     private Set<ScmciwhWerk> werks = new HashSet<>();
 

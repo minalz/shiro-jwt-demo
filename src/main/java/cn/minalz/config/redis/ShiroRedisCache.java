@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 自定义shiro的Redis缓存
@@ -23,7 +22,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
     private String name;
 
     /**
-     *  redis工具类
+     * redis工具类
      */
     private RedisUtil redisUtil;
 
@@ -35,22 +34,22 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
     @Override
     public V get(K key) throws CacheException {
         log.info("shiro redis cache get.{} K={}", name, key);
-        V result = (V)redisUtil.get(generateKey(key));
+        V result = (V) redisUtil.get(generateKey(key));
         return result;
     }
 
     @Override
     public V put(K key, V value) throws CacheException {
         log.info("shiro redis cache put.{} K={} V={}", name, key, value);
-        V result = (V)redisUtil.get(generateKey(key));
-        redisUtil.set(generateKey(key),value,RedisConstant.REDIS_SHIRO_CACHE_KEY_TIME);
+        V result = (V) redisUtil.get(generateKey(key));
+        redisUtil.set(generateKey(key), value, RedisConstant.REDIS_SHIRO_CACHE_KEY_TIME);
         return result;
     }
 
     @Override
     public V remove(K key) throws CacheException {
         log.info("shiro redis cache remove.{} K={}", name, key);
-        V result = (V)redisUtil.get(generateKey(key));
+        V result = (V) redisUtil.get(generateKey(key));
         redisUtil.del(generateKey(key));
         return result;
     }
@@ -59,7 +58,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
     public void clear() throws CacheException {
         log.info("shiro redis cache clear.{}", name);
         Set<String> keys = redisUtil.keys(RedisConstant.REDIS_SHIRO_CACHE_KEY_PREFIX + "*");
-        if(keys.size() == 0){
+        if (keys.size() == 0) {
             return;
         }
         keys.forEach(x -> {

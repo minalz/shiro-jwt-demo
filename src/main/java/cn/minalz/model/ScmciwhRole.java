@@ -51,12 +51,12 @@ public class ScmciwhRole implements Serializable {
     private Date createTime;
 
     // 权限集合
-    @OneToMany(targetEntity = ScmciwhPermission.class,cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = ScmciwhPermission.class, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinTable(name = "scmciwh_role_permission_auth",
             //joinColumns,当前对象在中间表中的外键
-            joinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")},
+            joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
             //inverseJoinColumns，对方对象在中间表的外键
-            inverseJoinColumns = {@JoinColumn(name = "permission_id",referencedColumnName = "id")}
+            inverseJoinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")}
     )
     private Set<ScmciwhPermission> permissions = new HashSet<>();
 }

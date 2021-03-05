@@ -28,11 +28,12 @@ public class RoleController {
 
     /**
      * 查询所有角色信息
+     *
      * @return
      */
     @ApiOperation(value = "查询所有角色信息")
     @PostMapping("/list")
-    public ResponseData list(){
+    public ResponseData list() {
         ResponseData responseData = new ResponseData();
         List<ScmciwhRole> roles = roleServiceImpl.findAll();
         responseData.list = roles;

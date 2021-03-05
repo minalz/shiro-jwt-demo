@@ -32,7 +32,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ScmciwhUser findById(Long id) {
         Optional<ScmciwhUser> byId = userRepository.findById(id);
-        if(byId.isPresent()){
+        if (byId.isPresent()) {
             return byId.get();
         }
         log.error("没有用户ID为{}的信息", id);

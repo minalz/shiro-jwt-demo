@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+/**
+ * 测试代码
+ */
 @RestController
 public class TestController {
 
@@ -91,10 +94,11 @@ public class TestController {
         responseData.msg = "我是普通用户5";
         return responseData;
     }
+
     @PostMapping("/updateJob")
     public ResponseData updateJobCron(Long id, String cronStr) throws SchedulerException {
         Optional<SysTask> byId = taskRepository.findById(id);
-        if(!byId.isPresent()){
+        if (!byId.isPresent()) {
             return ResponseData.oferror("数据不存在");
         }
         SysTask task = byId.get();

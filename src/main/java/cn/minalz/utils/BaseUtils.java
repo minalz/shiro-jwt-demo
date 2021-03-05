@@ -15,34 +15,36 @@ public class BaseUtils {
     /**
      * 获取当前登录用户
      */
-    public static ScmciwhUser getCurrentUser(){
-        ScmciwhUser user = (ScmciwhUser)SecurityUtils.getSubject().getPrincipal();
+    public static ScmciwhUser getCurrentUser() {
+        ScmciwhUser user = (ScmciwhUser) SecurityUtils.getSubject().getPrincipal();
         return user;
     }
 
     /**
      * 获取当前登录用户ID
      */
-    public static Long getCurrentId(){
-        ScmciwhUser user = (ScmciwhUser)SecurityUtils.getSubject().getPrincipal();
+    public static Long getCurrentId() {
+        ScmciwhUser user = (ScmciwhUser) SecurityUtils.getSubject().getPrincipal();
         return user.getId();
     }
 
     /**
      * 获取登录用户的map
+     *
      * @param httpServletRequest
      * @return
      */
-    public static Map<String, Object> getUserParameters(HttpServletRequest httpServletRequest){
+    public static Map<String, Object> getUserParameters(HttpServletRequest httpServletRequest) {
         return JwtUtil.validateToken(httpServletRequest.getParameter("token"));
     }
 
     /**
      * 获取登录用户的工厂
+     *
      * @param httpServletRequest
      * @return
      */
-    public static String getWerks(HttpServletRequest httpServletRequest){
+    public static String getWerks(HttpServletRequest httpServletRequest) {
         return getUserParameters(httpServletRequest).get("werks").toString();
     }
 

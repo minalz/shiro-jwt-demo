@@ -14,6 +14,7 @@ public @interface NoRepeatSubmit {
 
     /**
      * 设置请求锁定时间 默认锁定一分钟 防止死锁
+     *
      * @return
      */
     int lockTime() default 60;

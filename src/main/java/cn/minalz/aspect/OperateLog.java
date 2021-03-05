@@ -13,11 +13,14 @@ import java.lang.annotation.Target;
 public @interface OperateLog {
     /**
      * 业务名称
+     *
      * @return
      */
     String businessName() default "操作日志";
+
     /**
      * 业务类型
+     *
      * @return
      */
     String businessType() default "system";

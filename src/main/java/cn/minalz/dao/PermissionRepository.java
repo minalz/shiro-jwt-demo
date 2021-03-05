@@ -11,9 +11,10 @@ import java.util.List;
  * @author: minalz
  * @date: 2020-07-24 23:39
  **/
-public interface PermissionRepository extends JpaRepository<ScmciwhPermission,Long>, JpaSpecificationExecutor<ScmciwhPermission> {
+public interface PermissionRepository extends JpaRepository<ScmciwhPermission, Long>, JpaSpecificationExecutor<ScmciwhPermission> {
     /**
      * 根据父id查询符合的权限数据
+     *
      * @param id
      * @return
      */
@@ -21,6 +22,7 @@ public interface PermissionRepository extends JpaRepository<ScmciwhPermission,Lo
 
     /**
      * 根据path路径查找符合的权限数据
+     *
      * @param id
      * @return
      */

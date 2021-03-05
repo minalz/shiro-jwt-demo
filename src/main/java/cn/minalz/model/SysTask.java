@@ -17,25 +17,25 @@ public class SysTask implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 主键
-    @Column(name="job_name")
+    @Column(name = "job_name")
     private String jobName; // 任务名
     private String description; // 任务描述
-    @Column(name="cron_expression")
+    @Column(name = "cron_expression")
     private String cronExpression; // cron表达式
-    @Column(name="bean_class")
+    @Column(name = "bean_class")
     private String beanClass; // 任务执行时调用哪个类的方法 包名+类名
-    @Column(name="job_status")
+    @Column(name = "job_status")
     private String jobStatus; // 任务状态
-    @Column(name="job_group")
+    @Column(name = "job_group")
     private String jobGroup; // 任务分
-    @Column(name="create_user")
+    @Column(name = "create_user")
     private String createUser; // 创建者
-    @Column(name="create_time")
+    @Column(name = "create_time")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private String createTime; // 创建时间
-    @Column(name="update_user")
+    @Column(name = "update_user")
     private String updateUser; // 更新者
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @Column(name="update_time")
+    @Column(name = "update_time")
     private String updateTime; // 更新时间
 }

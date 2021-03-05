@@ -98,6 +98,7 @@ public class ShiroConfig {
 
     /**
      * 设置访问权限  访问xx资源 需要xx权限
+     *
      * @return
      */
     private Map<String, String> filterChainDefinitionMap() {
@@ -130,12 +131,13 @@ public class ShiroConfig {
 
     /**
      * 自定义配置拦截器
+     *
      * @return
      */
-    private Map<String, Filter> myFilters(){
+    private Map<String, Filter> myFilters() {
         Map<String, Filter> filtersMap = new LinkedHashMap<>();
         // 自定义JWTFilter
-        filtersMap.put("jwtFilter",new JWTFilter());
+        filtersMap.put("jwtFilter", new JWTFilter());
         // 自定义authc权限验证的过滤器
 //        filtersMap.put("authc", new MyFormAuthenticationFilter());
         // 配置自定义的shiro注销过滤器

@@ -52,14 +52,14 @@ public class MyRealm extends AuthorizingRealm {
         log.info("doGetAuthorizationInfo 权限查询方法被调用");
         //获取用户名
         //此Principal就是彼Principal（认证时构造的）
-        ScmciwhUser user = (ScmciwhUser)principals.getPrimaryPrincipal();
+        ScmciwhUser user = (ScmciwhUser) principals.getPrimaryPrincipal();
 //        String username = user.getUsername();
         //从数据库查询用户的权限和角色
 //        List<ScmciwhRoleModel> roles = scmciwhUserRepository.findRolesByUsername(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         Set<ScmciwhRole> roles = user.getRoles();
         Set<String> rolesSet = roles.stream().map(ScmciwhRole::getRoleCode).collect(Collectors.toSet());
-        if(rolesSet != null && rolesSet.size() > 0){
+        if (rolesSet != null && rolesSet.size() > 0) {
             simpleAuthorizationInfo.addRoles(rolesSet);
         }
         Set<String> permissionsSet = new HashSet<>();
@@ -70,7 +70,7 @@ public class MyRealm extends AuthorizingRealm {
             }).map(ScmciwhPermission::getUrl).collect(Collectors.toSet());
             permissionsSet.addAll(perms);
         });
-        if(permissionsSet != null && permissionsSet.size() > 0){
+        if (permissionsSet != null && permissionsSet.size() > 0) {
             simpleAuthorizationInfo.addStringPermissions(permissionsSet);
         }
 
@@ -86,23 +86,23 @@ public class MyRealm extends AuthorizingRealm {
         log.info("doGetAuthenticationInfo 证方法被调用");
         //token是封装好的用户提交的用户名密码
         JwtToken jwtToken = (JwtToken) auth;
-        String token = (String)jwtToken.getPrincipal();
-        if(token == null){
+        String token = (String) jwtToken.getPrincipal();
+        if (token == null) {
             return null;
         }
         Map<String, Object> tokenMap = JwtUtil.validateToken(token);
-        String username = (String)tokenMap.get("username");
+        String username = (String) tokenMap.get("username");
         //获取用户
         Optional<ScmciwhUser> topByUsername = scmciwhUserRepository.findTopByUsername(username);
-        if(!topByUsername.isPresent()){
+        if (!topByUsername.isPresent()) {
             return null;
-        }else{
+        } else {
             ScmciwhUser user = topByUsername.get();
             //封装AuthenticationInfo
 //            ByteSource bsSalt = new SimpleByteSource(user.getPrivateSalt());
 //            new MySimpleByteSource(salt)
 //            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(token, token, getName());
-            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user,token,null,getName());
+            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, token, null, getName());
 //            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(token,token,null,getName());
             return authenticationInfo;
         }
@@ -130,6 +130,7 @@ public class MyRealm extends AuthorizingRealm {
 
     /**
      * 重写方法,清除当前用户的的 授权缓存
+     *
      * @param principals
      */
     @Override
@@ -139,6 +140,7 @@ public class MyRealm extends AuthorizingRealm {
 
     /**
      * 重写方法，清除当前用户的 认证缓存
+     *
      * @param principals
      */
     @Override

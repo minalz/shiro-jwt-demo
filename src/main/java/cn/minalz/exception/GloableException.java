@@ -1,5 +1,8 @@
 package cn.minalz.exception;
 
+/**
+ * 统一异常
+ */
 public class GloableException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
@@ -12,7 +15,7 @@ public class GloableException extends RuntimeException {
      */
     protected String errorMsg;
 
-    public GloableException(){
+    public GloableException() {
 
     }
 

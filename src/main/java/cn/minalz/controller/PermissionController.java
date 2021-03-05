@@ -41,11 +41,12 @@ public class PermissionController {
 
     /**
      * 查询所有权限信息
+     *
      * @return
      */
     @ApiOperation(value = "查询所有权限信息")
     @PostMapping("/list")
-    public ResponseData list(){
+    public ResponseData list() {
         ResponseData responseData = new ResponseData();
         List<TreeNode> treeNodes = treeService.getTrees();
         responseData.list = treeNodes;
@@ -56,11 +57,12 @@ public class PermissionController {
 
     /**
      * 根据传入的权限Id查询权限信息(包括自身)
+     *
      * @return
      */
     @ApiOperation(value = "根据ID查询权限信息")
     @PostMapping("/list/{id}")
-    public ResponseData listById(@PathVariable("id")Long id){
+    public ResponseData listById(@PathVariable("id") Long id) {
         ResponseData responseData = new ResponseData();
         TreeNode treeNode = treeService.getTreeById(id);
         responseData.list.add(treeNode);
@@ -71,10 +73,11 @@ public class PermissionController {
 
     /**
      * 根据当前已登录的用户，查询对应的菜单权限
+     *
      * @return
      */
     @PostMapping("/list/user")
-    public ResponseData listByUser(){
+    public ResponseData listByUser() {
         // 查询当前用户的ID
         Long id = BaseUtils.getCurrentId();
         // 根据用户ID查询对应的用户信息

@@ -61,7 +61,7 @@ public class SendEmailUtil {
 
             // 如果是自己搭建的邮箱服务器 可以用下面这个
 //            transport.connect("yourselfIP", 123, username, authorizationCode);
-            transport.connect(username,authorizationCode);
+            transport.connect(username, authorizationCode);
             transport.sendMessage(message, new Address[]{new InternetAddress(to)});
             transport.close();
             return true;

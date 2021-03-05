@@ -2,6 +2,9 @@ package cn.minalz.utils;
 
 import org.springframework.util.DigestUtils;
 
+/**
+ * 常量定义
+ */
 public class Common {
 
 
@@ -31,7 +34,7 @@ public class Common {
     public static final String PP_LIFNR = "YYYY";
 
     // 转储采购订单类型
-    public static final String[] ZC_BSART = { "UB", "ZNB9" };
+    public static final String[] ZC_BSART = {"UB", "ZNB9"};
     // 生产订单锁定状态标识
     public static final String PRODUCTION_ORDER_LOCKED = "X";
 
@@ -39,7 +42,7 @@ public class Common {
     public static final String DO_WBSTK = "C";
 
     // 其他按托
-    public static final String[] OT_MATKL = { "2002", "2003", "2005" };
+    public static final String[] OT_MATKL = {"2002", "2003", "2005"};
     /**
      * 工厂Type
      */
@@ -164,10 +167,10 @@ public class Common {
 
 
     // 大桶果汁果肉创建批次的id
-    public static final int chargId = 1;
+    public static final int CHARGID = 1;
 
     // 需求单流水号id
-    public static final int demandId = 2;
+    public static final int DEMANDID = 2;
 
 
     // 是否启用 0：停用，1：启用
@@ -288,13 +291,13 @@ public class Common {
     //版本号type
     public static final String VERSION_TYPE = "PDAVERSION";
     //创批下拉框
-    public static final String BATCHCREATE ="BATCHCREATE";
+    public static final String BATCHCREATE = "BATCHCREATE";
     //制造商下拉框
-    public static final String PRODUCER ="PRODUCER";
+    public static final String PRODUCER = "PRODUCER";
     //品牌/模具号下拉
-    public static final String ZBATCH03 ="ZBATCH03";
+    public static final String ZBATCH03 = "ZBATCH03";
     //配方代码
-    public static final String ZBATCH09 ="ZBATCH09";
+    public static final String ZBATCH09 = "ZBATCH09";
     public static final String BD = "BD";
     public static final String PRINT = "PRINT";
     //按托投料TYPE
@@ -327,11 +330,12 @@ public class Common {
 
 
     //盐，用于混交md5
-    private static final String slat = "&%5123***&&%%$$#@";
+    private static final String SLAT = "&%5123***&&%%$$#@";
+
     public static String getMD5(String str) {
-        String base = str +"/"+slat;
+        String base = str + "/" + SLAT;
         String md5 = base;
-        for(int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             md5 = DigestUtils.md5DigestAsHex(md5.getBytes());
         }
         return md5;
@@ -340,7 +344,7 @@ public class Common {
     public static final String LQWL_BASE = "/opt/scmciwh/lqwl/";
     public static final String MAIL_BASE = "/opt/scmciwh/mailexcel/"; //邮件发送暂存地址
     public static final String MAIL_ENTER = "ENTER"; //入库邮件名称
-    public static final Integer LQWL_DAY = 30;//用于数据库没维护临期提醒日期，系统默认有个提醒日期
+    public static final Integer LQWL_DAY = 30; //用于数据库没维护临期提醒日期，系统默认有个提醒日期
 
     //仓储发送QMS的操作类型
     public static final String QMS_TYPE_STORAGE = "入库";
@@ -391,11 +395,11 @@ public class Common {
     public static final String PEFM = "PEFM"; //PE防尘膜
 
     //寄售单类型
-    public static final String TYPE_JS_01="01"; //寄售入库
-    public static final String TYPE_JS_02="02"; //寄售退货
+    public static final String TYPE_JS_01 = "01"; //寄售入库
+    public static final String TYPE_JS_02 = "02"; //寄售退货
     //转储发货和寄售出库的类型
-    public static final String TYPE_LF="LF"; //销售出库
-    public static final String TYPE_NL="NL"; //转储发货
+    public static final String TYPE_LF = "LF"; //销售出库
+    public static final String TYPE_NL = "NL"; //转储发货
     //Excel后缀
     public static final String SUFFIX_2003 = ".xls";
     public static final String SUFFIX_2007 = ".xlsx";
@@ -428,9 +432,13 @@ public class Common {
 
     public static final String CAGE_MAKTX = "%铁笼%"; //铁笼中文描述
 
-    /** 通用常数 TRUE */
-    public static final Boolean COMMON_TRUE = true; 
+    /**
+     * 通用常数 TRUE
+     */
+    public static final Boolean COMMON_TRUE = true;
 
-    /** 通用常数 FALSE */
+    /**
+     * 通用常数 FALSE
+     */
     public static final Boolean COMMON_FALSE = false;
 }

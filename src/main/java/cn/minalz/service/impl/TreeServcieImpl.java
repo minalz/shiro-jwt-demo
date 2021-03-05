@@ -26,9 +26,9 @@ public class TreeServcieImpl implements ITreeService {
     private PermissionRepository permissionRepository;
 
     @Override
-    public TreeNode getById(Long id){
+    public TreeNode getById(Long id) {
         Optional<ScmciwhPermission> byId = permissionRepository.findById(id);
-        if(!byId.isPresent()){
+        if (!byId.isPresent()) {
             return null;
         }
         ScmciwhPermission permission = byId.get();
@@ -62,7 +62,7 @@ public class TreeServcieImpl implements ITreeService {
             // 如果path和ID相等，说明这是一个root节点
             // 那么条件就是id不等于传输进来的值 但是parentId得需要等于传进来的值
             predicates.add(criteriaBuilder.equal(root.get("parentId"), id));
-            predicates.add(criteriaBuilder.notEqual(root.get("id"), id ));
+            predicates.add(criteriaBuilder.notEqual(root.get("id"), id));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
         List<TreeNode> nodes = new ArrayList<>();
@@ -75,7 +75,7 @@ public class TreeServcieImpl implements ITreeService {
     }
 
     @Override
-    public TreeNode generateTreeNode(Long id){
+    public TreeNode generateTreeNode(Long id) {
         // 根据节点id查询该节点信息
         TreeNode treeById = getById(id);
         // 根据该节点查询该节点的children节点
@@ -95,16 +95,16 @@ public class TreeServcieImpl implements ITreeService {
         Set<Long> rootIds = new HashSet<>();
         List<TreeNode> treeNodes = new ArrayList<>();
         permissions.forEach(x -> {
-            if(!permissionMap.containsKey(x.getParentId())){
+            if (!permissionMap.containsKey(x.getParentId())) {
                 permissionMap.put(x.getParentId(), new ArrayList<>());
             }
             permissionMap.get(x.getParentId()).add(x);
             // 根节点
-            if(x.getId() == x.getParentId()){
+            if (x.getId() == x.getParentId()) {
                 rootIds.add(x.getId());
             }
             TreeNode treeNode = new TreeNode();
-            transferTreeNode(x,treeNode);
+            transferTreeNode(x, treeNode);
             treeNodes.add(treeNode);
         });
         List<TreeNode> treeNodesList = transDepartment(treeNodes);
@@ -124,49 +124,50 @@ public class TreeServcieImpl implements ITreeService {
         Set<Long> rootIds = new HashSet<>();
         List<TreeNode> treeNodes = new ArrayList<>();
         permissionSet.forEach(x -> {
-            if(!permissionMap.containsKey(x.getParentId())){
+            if (!permissionMap.containsKey(x.getParentId())) {
                 permissionMap.put(x.getParentId(), new ArrayList<>());
             }
             permissionMap.get(x.getParentId()).add(x);
             // 根节点
-            if(x.getId() == x.getParentId()){
+            if (x.getId() == x.getParentId()) {
                 rootIds.add(x.getId());
             }
             TreeNode treeNode = new TreeNode();
-            transferTreeNode(x,treeNode);
+            transferTreeNode(x, treeNode);
             treeNodes.add(treeNode);
         });
         List<TreeNode> treeNodesList = transDepartment(treeNodes);
         return treeNodesList;
     }
 
-    private List<TreeNode> transDepartment(List<TreeNode> rootList){
+    private List<TreeNode> transDepartment(List<TreeNode> rootList) {
         List<TreeNode> nodeList = new ArrayList<>();
         for (TreeNode treeNode : rootList) {
-            if (treeNode.getId() == treeNode.getPId()){//表明是一级父类
+            if (treeNode.getId() == treeNode.getPId()) {//表明是一级父类
                 nodeList.add(treeNode);
                 List<TreeNode> treeNodes = setChildren(treeNode.getId(), rootList);
-                if(treeNodes != null){
+                if (treeNodes != null) {
                     treeNode.getChildren().addAll(treeNodes);
                 }
             }
         }
         return nodeList.stream().sorted(Comparator.comparing(TreeNode::getSort)).collect(Collectors.toList());
     }
-    private List<TreeNode> setChildren(Long id, List<TreeNode> list ){
+
+    private List<TreeNode> setChildren(Long id, List<TreeNode> list) {
         List<TreeNode> childList = new ArrayList<>();
         for (TreeNode treeNode : list) {
-            if (id == treeNode.getPId() && id != treeNode.getId()){
+            if (id == treeNode.getPId() && id != treeNode.getId()) {
                 childList.add(treeNode);
             }
         }
         for (TreeNode treeNode : childList) {
             List<TreeNode> treeNodes = setChildren(treeNode.getId(), list);
-            if(treeNodes != null){
+            if (treeNodes != null) {
                 treeNode.getChildren().addAll(treeNodes);
             }
         }
-        if (childList.size() == 0){
+        if (childList.size() == 0) {
             return null;
         }
         // 根据sort升序排列
@@ -175,10 +176,11 @@ public class TreeServcieImpl implements ITreeService {
 
     /**
      * Permission属性转TreeNode属性
+     *
      * @return
      */
-    private void transferTreeNode(ScmciwhPermission permission, TreeNode treeNode){
-        if(permission == null)
+    private void transferTreeNode(ScmciwhPermission permission, TreeNode treeNode) {
+        if (permission == null)
             return;
         treeNode.setId(permission.getId());
         treeNode.setName(permission.getPermissionName());

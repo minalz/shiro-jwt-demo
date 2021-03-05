@@ -8,14 +8,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义不重复提交的切面
@@ -54,7 +51,7 @@ public class RepeatSubmitAspect {
             e.printStackTrace();
             log.error("验证重复提交时出现未知异常!");
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             // 执行后 删除锁
             redisUtil.releaseLock(key);
         }

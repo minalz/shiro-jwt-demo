@@ -84,45 +84,46 @@ public class LoginController {
 //        }
         Optional<ScmciwhUser> topByUsername = scmciwhUserRepository.findTopByUsername(username);
         // 两个提示都一样 可以让用户不知道到底是账号还是密码错误 一定程度可以迷惑恶意攻击者
-        if(!topByUsername.isPresent()){
+        if (!topByUsername.isPresent()) {
             responseData.msg = "登录账号密码错误";
 //            return "登录账号密码错误";
         }
         ScmciwhUser user = topByUsername.get();
         password = Common.getMD5(password);
-        if(!user.getPassword().equals(password)){
+        if (!user.getPassword().equals(password)) {
             responseData.msg = "登录账号密码错误";
 //            return "登录账号密码错误";
         }
 
         // 走到这里 说明账号密码是正确的了
-        HashMap<String,Object> map = new HashMap<>();
-        map.put("username",user.getUsername());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("username", user.getUsername());
         String token = JwtUtil.generateToken(map);
 
         // 生成的token应该要存储到redis中
-        UserRedisToken userRedisToken = new UserRedisToken(token,new Date().getTime());
-        redisUtil.set(RedisConstant.REDIS_STORAGE_USERNAME_PREFIX + username + "_" + token,userRedisToken,RedisConstant.REDIS_STORAGE_USERNAME_TIME);
-        logger.info("登录成功 --> 用户名：[{}] -- {}",username,userRedisToken);
+        UserRedisToken userRedisToken = new UserRedisToken(token, new Date().getTime());
+        redisUtil.set(RedisConstant.REDIS_STORAGE_USERNAME_PREFIX + username + "_" + token, userRedisToken, RedisConstant.REDIS_STORAGE_USERNAME_TIME);
+        logger.info("登录成功 --> 用户名：[{}] -- {}", username, userRedisToken);
 
-        responseData.data.put("username",username);
+        responseData.data.put("username", username);
 //        responseData.data.put("isAdmin",true);
 //        responseData.data.put("werks",werks);
         responseData.token = token;
-        responseData.data.put("token",token);
+        responseData.data.put("token", token);
 
         return responseData;
     }
 
     public static void main(String[] args) {
-        HashMap<String,Object> map = new HashMap<>();
-        map.put("username","cjgly");
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("username", "cjgly");
         String token = JwtUtil.generateToken(map);
         System.out.println("token -- " + token);
     }
 
     /**
      * 退出操作由前端清除存储在缓存中的token即可
+     *
      * @return
      */
     /*@RequestMapping("/logout")
@@ -146,7 +147,6 @@ public class LoginController {
         }
         return responseData;
     }*/
-
     @GetMapping("/login_success")
     @ResponseBody
     public ResponseData loginSuccess() {

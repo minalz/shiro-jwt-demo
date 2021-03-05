@@ -24,7 +24,7 @@ public class PermissionServiceImpl implements IPermissionService {
      * 查询菜单的根节点 id = parent_id
      */
     @Override
-    public List<ScmciwhPermission> findRootPermission(){
+    public List<ScmciwhPermission> findRootPermission() {
         List<ScmciwhPermission> permissions = permissionRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
             // 如果path和ID相等，说明这是一个root节点
@@ -48,7 +48,7 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     public ScmciwhPermission findById(Long id) {
         Optional<ScmciwhPermission> byId = permissionRepository.findById(id);
-        if(byId.isPresent()){
+        if (byId.isPresent()) {
             return byId.get();
         }
         return null;

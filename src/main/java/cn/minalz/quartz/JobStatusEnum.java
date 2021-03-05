@@ -1,15 +1,15 @@
 package cn.minalz.quartz;
 
-public enum JobStatusEnum{
+public enum JobStatusEnum {
 
 
     /**
-	 * 0=停止
-	 */
+     * 0=停止
+     */
     STOP("0", "停止"),
     /**
-	 * 1=运行
-	 */
+     * 1=运行
+     */
     RUNNING("1", "运行");
 
     private String value = null;
@@ -29,12 +29,16 @@ public enum JobStatusEnum{
         return null;
     }
 
-    /** 获取value */
+    /**
+     * 获取value
+     */
     public String getValue() {
         return value;
     }
 
-    /** 获取code */
+    /**
+     * 获取code
+     */
     public String getCode() {
         return code;
     }

@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GloableExceptionResolver {
 
-    private static final Logger log = LoggerFactory.getLogger(GloableExceptionResolver.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GloableExceptionResolver.class);
 
     /**
      * 处理自定义异常
      */
     @ExceptionHandler(value = GloableException.class)
     public CommonResult bizExceptionHandler(GloableException e) {
-        log.error(e.getMessage(), e);
+        LOG.error(e.getMessage(), e);
         return CommonResult.defineError(e);
     }
 
@@ -29,7 +29,7 @@ public class GloableExceptionResolver {
      */
     @ExceptionHandler(value = Exception.class)
     public CommonResult exceptionHandler(Exception e) {
-        log.error(e.getMessage(), e);
+        LOG.error(e.getMessage(), e);
         return CommonResult.otherError(ErrorEnum.INTERNAL_SERVER_ERROR);
 
     }

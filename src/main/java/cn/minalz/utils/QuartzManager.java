@@ -19,10 +19,10 @@ public class QuartzManager {
 
     /**
      * 添加任务
-     * 
+     *
      * @param scheduleJob
      * @throws SchedulerException
-     */    
+     */
     @SuppressWarnings("unchecked")
     public void addJob(SysTask task) {
         try {
@@ -51,7 +51,7 @@ public class QuartzManager {
 
     /**
      * 获取所有计划中的任务列表
-     * 
+     *
      * @return
      * @throws SchedulerException
      */
@@ -81,7 +81,7 @@ public class QuartzManager {
 
     /**
      * 所有正在运行的job
-     * 
+     *
      * @return
      * @throws SchedulerException
      */
@@ -110,7 +110,7 @@ public class QuartzManager {
 
     /**
      * 暂停一个job
-     * 
+     *
      * @param task
      * @throws SchedulerException
      */
@@ -121,7 +121,7 @@ public class QuartzManager {
 
     /**
      * 恢复一个job
-     * 
+     *
      * @param task
      * @throws SchedulerException
      */
@@ -132,7 +132,7 @@ public class QuartzManager {
 
     /**
      * 删除一个job
-     * 
+     *
      * @param task
      * @throws SchedulerException
      */
@@ -144,7 +144,7 @@ public class QuartzManager {
 
     /**
      * 立即执行job
-     * 
+     *
      * @param task
      * @throws SchedulerException
      */
@@ -155,7 +155,7 @@ public class QuartzManager {
 
     /**
      * 更新job时间表达式
-     * 
+     *
      * @param task
      * @throws SchedulerException
      */

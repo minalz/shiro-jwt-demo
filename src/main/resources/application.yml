@@ -3,8 +3,8 @@ spring:
   application:
     name: scmciwh
   profiles:
-#    如果一开始这样配置的话  报错：found character '@' that cannot start any token. (Do not use @ for indentation)
-#    那么需要进行一次构建(install),就没问题了
+    #    如果一开始这样配置的话  报错：found character '@' that cannot start any token. (Do not use @ for indentation)
+    #    那么需要进行一次构建(install),就没问题了
     active: @activatedProperties@
 
 server:

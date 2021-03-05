@@ -19,6 +19,7 @@ public class ShiroLifecycleBeanPostProcessorConfig {
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
+
     // 下面的bean打开会导致 重复授权的问题
     /*@Bean
     @DependsOn("lifecycleBeanPostProcessor")

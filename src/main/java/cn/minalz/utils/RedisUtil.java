@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 /**
  * @author minalz
  * @Description 自定义shiro密码比较器
@@ -31,10 +32,11 @@ public final class RedisUtil {
 
     /**
      * 获取所有存在的key的个数
+     *
      * @param keys
      * @return
      */
-    public Long count(String keys){
+    public Long count(String keys) {
         try {
             return redisTemplate.countExistingKeys(redisTemplate.keys(keys));
         } catch (Exception e) {
@@ -584,11 +586,12 @@ public final class RedisUtil {
 
     /**
      * 获取分布式锁
+     *
      * @return
      */
-    public Boolean tryLock(String key){
+    public Boolean tryLock(String key) {
         Object o = this.get(key);
-        if(o != null){
+        if (o != null) {
             return true;
         }
         return false;
@@ -597,14 +600,14 @@ public final class RedisUtil {
     /**
      * 添加锁
      */
-    public void addLock(String key, Object value, int time){
-        this.set(key, value,time);
+    public void addLock(String key, Object value, int time) {
+        this.set(key, value, time);
     }
 
     /**
      * 释放锁
      */
-    public void releaseLock(String key){
+    public void releaseLock(String key) {
         this.del(key);
     }
 }

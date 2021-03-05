@@ -1,9 +1,6 @@
 package cn.minalz.config.filter;
 
 import cn.minalz.config.jwt.JwtToken;
-import cn.minalz.config.redis.RedisConstant;
-import cn.minalz.dto.UserRedisToken;
-import cn.minalz.utils.JwtUtil;
 import cn.minalz.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.subject.Subject;
@@ -15,9 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  * 自定义一个Filter，用来拦截所有的请求判断是否携带Token
@@ -55,7 +49,7 @@ public class JWTFilter extends AccessControlFilter {
         //所以以后发起请求的时候就需要在Header中放一个Authorization，值就是对应的Token
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = request.getHeader("Authorization");
-        if(token == null){
+        if (token == null) {
             onLoginFail401(servletResponse);
             //调用下面的方法向客户端返回错误信息
             return false;
@@ -68,7 +62,7 @@ public class JWTFilter extends AccessControlFilter {
         try {
             // 委托 realm 进行登录认证
             //所以这个地方最终还是调用JwtRealm进行的认证
-            Subject subject = getSubject(servletRequest,servletResponse);
+            Subject subject = getSubject(servletRequest, servletResponse);
             subject.login(jwtToken);
             // 如果这里登录成功  那么刷新token的过期时间
             // 方法级别的url的权限校验

@@ -16,14 +16,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <sonar.exclusions>
-            test/**/*
-        </sonar.exclusions>
-        <sonar.scm.disabled>true</sonar.scm.disabled>
-        <sonar.host.url>http://minalz.cn:9001</sonar.host.url>
-        <sonar.projectKey>shiro-jwt-demo-key</sonar.projectKey>
-        <sonar.projectName>shiro-jwt-demo-name</sonar.projectName>
-        <sonar.projectVersion>1.0</sonar.projectVersion>
     </properties>
 
     <dependencies>
@@ -137,20 +129,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-            </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonarsource.scanner.maven</groupId>
-                    <artifactId>sonar-maven-plugin</artifactId>
-                    <version>3.8.0.2131</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <!--build节点增加内容-->
         <resources>
             <resource>

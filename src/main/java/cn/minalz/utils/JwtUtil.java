@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * jwt工具类
+ */
 public class JwtUtil {
     static final String SECRET = "ThisIsASecret";
 

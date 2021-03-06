@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*
+/**
  * 自定义一个Filter，用来拦截所有的请求判断是否携带Token
  * isAccessAllowed()判断是否携带了有效的JwtToken
  * onAccessDenied()是没有携带JwtToken的时候进行账号密码登录，登录成功允许访问，登录失败拒绝访问

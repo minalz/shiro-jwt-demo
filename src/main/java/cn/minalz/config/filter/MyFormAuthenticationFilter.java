@@ -26,7 +26,8 @@ import java.util.Set;
 public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 
     @Override
-    protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
+                                     ServletResponse response) throws Exception {
         // 登录有一个问题 就是当session过期了 会根据之前旧的浏览器地址进行跳转 不太友好
         // 处理：直接跳转到登录页
         // 最好的方式 应该是判断登录后的用户 是否有这个页面的访问权限，如果没有，那么直接跳转到登录页
@@ -55,7 +56,8 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
         }
 
         if (successUrl == null) {
-            throw new IllegalStateException("Success URL not available via saved request or via the successUrlFallback method parameter. One of these must be non-null for issueSuccessRedirect() to work.");
+            throw new IllegalStateException("Success URL not available via saved request or via the successUrlFallback
+            method parameter. One of these must be non-null for issueSuccessRedirect() to work.");
         } else {
             WebUtils.issueRedirect(request, response, successUrl, (Map)null, contextRelative);
         }*/

@@ -1,5 +1,8 @@
 package cn.minalz.quartz;
 
+/**
+ * 定时任务枚举类
+ */
 public enum JobStatusEnum {
 
 
@@ -15,9 +18,9 @@ public enum JobStatusEnum {
     private String value = null;
     private String code = null;
 
-    private JobStatusEnum(String _code, String _value) {
-        this.value = _value;
-        this.code = _code;
+    JobStatusEnum(String code, String value) {
+        this.value = value;
+        this.code = code;
     }
 
     public static JobStatusEnum getEnumByKey(String key) {

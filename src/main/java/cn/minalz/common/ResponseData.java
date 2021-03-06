@@ -10,30 +10,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 同一返回包装类
+ */
 @ApiModel(value = "接口返回封装对象")
 public class ResponseData implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "返回状态：00 请求成功，01 请求失败，05 登录超时")
-    public String code = "00";// 返回状态：00 请求成功，01 请求失败，E 请求失败，05 登录超时
+    private String code = "00"; // 返回状态：00 请求成功，01 请求失败，E 请求失败，05 登录超时
     @ApiModelProperty(value = "返回信息")
-    public String msg = "OK";
+    private String msg = "OK";
     @ApiModelProperty(value = "数据集合")
-    public List list = new ArrayList();
+    private List list = new ArrayList();
     @ApiModelProperty(value = "数据对象")
-    public Map<String, Object> data = new HashMap<>();
+    private Map<String, Object> data = new HashMap<>();
     @ApiModelProperty(value = "分页，总页数")
-    public int totalPage;// 分页时，总页数
+    private int totalPage; // 分页时，总页数
     @ApiModelProperty(value = "分页，总记录数")
-    public int count;
+    private int count;
     @ApiModelProperty(value = "当前页码")
-    public int currentPage;
+    private int currentPage;
     @ApiModelProperty(value = "token")
-    public String token;
+    private String token;
     @ApiModelProperty(value = "错误类型")
-    public String errtype;
+    private String errtype;
     @ApiModelProperty(value = "操作ID")
-    public String opid;
+    private String opid;
 
     public static ResponseData of(String type, String message) {
         return new ResponseData(type, message);
@@ -59,13 +62,13 @@ public class ResponseData implements Serializable {
         return new ResponseData("00", "OK", page.getContent(), page.getTotalPages(), (int) page.getTotalElements(), pageNumber);
     }
 
-    public ResponseData SetOKMsg(String message) {
+    public ResponseData setOKMsg(String message) {
         this.code = "00";
         this.msg = message;
         return this;
     }
 
-    public ResponseData SetErrMsg(String message) {
+    public ResponseData setErrMsg(String message) {
         this.code = "01";
         this.msg = message;
         return this;

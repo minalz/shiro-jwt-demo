@@ -103,6 +103,9 @@ public class MySimpleByteSource implements ByteSource, Serializable {
         }
     }
 
+    /**
+     * 工具类
+     */
     private static final class BytesHelper extends CodecSupport {
         private BytesHelper() {
         }

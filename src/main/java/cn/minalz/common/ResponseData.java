@@ -10,51 +10,48 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 同一返回包装类
- */
 @ApiModel(value = "接口返回封装对象")
 public class ResponseData implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty(value = "返回状态：00 请求成功，01 请求失败，05 登录超时")
-    private String code = "00"; // 返回状态：00 请求成功，01 请求失败，E 请求失败，05 登录超时
-    @ApiModelProperty(value = "返回信息")
-    private String msg = "OK";
-    @ApiModelProperty(value = "数据集合")
-    private List list = new ArrayList();
-    @ApiModelProperty(value = "数据对象")
-    private Map<String, Object> data = new HashMap<>();
-    @ApiModelProperty(value = "分页，总页数")
-    private int totalPage; // 分页时，总页数
-    @ApiModelProperty(value = "分页，总记录数")
-    private int count;
-    @ApiModelProperty(value = "当前页码")
-    private int currentPage;
-    @ApiModelProperty(value = "token")
-    private String token;
-    @ApiModelProperty(value = "错误类型")
-    private String errtype;
-    @ApiModelProperty(value = "操作ID")
-    private String opid;
+    @ApiModelProperty(value="返回状态：00 请求成功，01 请求失败，05 登录超时")
+    public String code = "00";// 返回状态：00 请求成功，01 请求失败，E 请求失败，05 登录超时
+    @ApiModelProperty(value="返回信息")
+    public String msg = "OK";
+    @ApiModelProperty(value="数据集合")
+    public List list = new ArrayList();
+    @ApiModelProperty(value="数据对象")
+    public Map<String, Object> data = new HashMap<>();
+    @ApiModelProperty(value="分页，总页数")
+    public int totalPage;// 分页时，总页数
+    @ApiModelProperty(value="分页，总记录数")
+    public int count;
+    @ApiModelProperty(value="当前页码")
+    public int currentPage;
+    @ApiModelProperty(value="token")
+    public String token;
+    @ApiModelProperty(value="错误类型")
+    public String errtype;
+    @ApiModelProperty(value="操作ID")
+    public String opid;
 
-    public static ResponseData of(String type, String message) {
+    public static ResponseData of(String type , String message){
         return new ResponseData(type, message);
     }
 
-    public static ResponseData oferror(String message) {
-        return new ResponseData("01", message);
+    public static ResponseData oferror(String message){
+        return new ResponseData("01",message);
     }
 
-    public static ResponseData ofok() {
-        return new ResponseData("00", "OK");
+    public static ResponseData ofok(){
+        return new ResponseData("00","OK");
     }
 
-    public static ResponseData ofok(Map<String, Object> data) {
-        return new ResponseData("00", "OK", data);
+    public static ResponseData ofok(Map<String, Object> data){
+        return new ResponseData("00","OK", data);
     }
 
-    public static ResponseData of() {
+    public static ResponseData of(){
         return new ResponseData();
     }
 
@@ -62,30 +59,30 @@ public class ResponseData implements Serializable {
         return new ResponseData("00", "OK", page.getContent(), page.getTotalPages(), (int) page.getTotalElements(), pageNumber);
     }
 
-    public ResponseData setOKMsg(String message) {
+    public ResponseData SetOKMsg(String message){
         this.code = "00";
         this.msg = message;
         return this;
     }
 
-    public ResponseData setErrMsg(String message) {
+    public ResponseData SetErrMsg(String message){
         this.code = "01";
         this.msg = message;
         return this;
     }
 
-    public ResponseData(String type, String message) {
+    public ResponseData(String type , String message){
         this.code = type;
         this.msg = message;
     }
 
-    public ResponseData(String type, String message, Map<String, Object> data) {
+    public ResponseData(String type , String message, Map<String, Object> data){
         this.code = type;
         this.msg = message;
         this.data = data;
     }
 
-    public ResponseData() {
+    public ResponseData(){
     }
 
     public ResponseData(String code, String msg, List list, int totalPage, int count, int currentPage) {

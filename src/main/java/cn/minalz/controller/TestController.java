@@ -4,6 +4,7 @@ import cn.minalz.aspect.NoRepeatSubmit;
 import cn.minalz.common.ResponseData;
 import cn.minalz.dao.TaskRepository;
 import cn.minalz.dao.UserRepository;
+import cn.minalz.exception.CoreException;
 import cn.minalz.model.SysTask;
 import cn.minalz.utils.QuartzManager;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -106,6 +107,14 @@ public class TestController {
         SysTask saveTask = taskRepository.save(task);
         quartzManager.updateJobCron(saveTask);
         return ResponseData.ofok();
+    }
+
+    @NoRepeatSubmit
+    @PostMapping("test")
+    public ResponseData test(String tokenId){
+        System.out.println("tokenId -- " + tokenId);
+        throw CoreException.of("测试抛出的异常能否被切面抓取");
+
     }
 
 }

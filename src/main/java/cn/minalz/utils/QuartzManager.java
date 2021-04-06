@@ -1,6 +1,6 @@
 package cn.minalz.utils;
 
-import cn.minalz.model.SysTask;
+import cn.minalz.model.ScmciwhQuartzTaskModel;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -24,12 +24,12 @@ public class QuartzManager {
      * @throws SchedulerException
      */
     @SuppressWarnings("unchecked")
-    public void addJob(SysTask task) {
+    public void addJob(ScmciwhQuartzTaskModel task) {
         try {
             // 创建jobDetail实例，绑定Job实现类
             // 指明job的名称，所在组的名称，以及绑定job类
 
-            Class<? extends Job> jobClass = (Class<? extends Job>) (Class.forName(task.getBeanClass()).newInstance()
+            Class<? extends Job> jobClass = (Class<? extends Job>) (Class.forName(task.getJobClass()).newInstance()
                     .getClass());
             JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(task.getJobName(), task.getJobGroup())// 任务名称和组构成任务key
                     .build();
@@ -55,14 +55,14 @@ public class QuartzManager {
      * @return
      * @throws SchedulerException
      */
-    public List<SysTask> getAllJob() throws SchedulerException {
+    public List<ScmciwhQuartzTaskModel> getAllJob() throws SchedulerException {
         GroupMatcher<JobKey> matcher = GroupMatcher.anyJobGroup();
         Set<JobKey> jobKeys = scheduler.getJobKeys(matcher);
-        List<SysTask> jobList = new ArrayList<SysTask>();
+        List<ScmciwhQuartzTaskModel> jobList = new ArrayList<ScmciwhQuartzTaskModel>();
         for (JobKey jobKey : jobKeys) {
             List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
             for (Trigger trigger : triggers) {
-                SysTask job = new SysTask();
+                ScmciwhQuartzTaskModel job = new ScmciwhQuartzTaskModel();
                 job.setJobName(jobKey.getName());
                 job.setJobGroup(jobKey.getGroup());
                 job.setDescription("触发器:" + trigger.getKey());
@@ -85,11 +85,11 @@ public class QuartzManager {
      * @return
      * @throws SchedulerException
      */
-    public List<SysTask> getRunningJob() throws SchedulerException {
+    public List<ScmciwhQuartzTaskModel> getRunningJob() throws SchedulerException {
         List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
-        List<SysTask> jobList = new ArrayList<SysTask>(executingJobs.size());
+        List<ScmciwhQuartzTaskModel> jobList = new ArrayList<ScmciwhQuartzTaskModel>(executingJobs.size());
         for (JobExecutionContext executingJob : executingJobs) {
-            SysTask job = new SysTask();
+            ScmciwhQuartzTaskModel job = new ScmciwhQuartzTaskModel();
             JobDetail jobDetail = executingJob.getJobDetail();
             JobKey jobKey = jobDetail.getKey();
             Trigger trigger = executingJob.getTrigger();
@@ -114,7 +114,7 @@ public class QuartzManager {
      * @param task
      * @throws SchedulerException
      */
-    public void pauseJob(SysTask task) throws SchedulerException {
+    public void pauseJob(ScmciwhQuartzTaskModel task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getJobGroup());
         scheduler.pauseJob(jobKey);
     }
@@ -125,7 +125,7 @@ public class QuartzManager {
      * @param task
      * @throws SchedulerException
      */
-    public void resumeJob(SysTask task) throws SchedulerException {
+    public void resumeJob(ScmciwhQuartzTaskModel task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getJobGroup());
         scheduler.resumeJob(jobKey);
     }
@@ -136,7 +136,7 @@ public class QuartzManager {
      * @param task
      * @throws SchedulerException
      */
-    public void deleteJob(SysTask task) throws SchedulerException {
+    public void deleteJob(ScmciwhQuartzTaskModel task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getJobGroup());
         scheduler.deleteJob(jobKey);
 
@@ -148,7 +148,7 @@ public class QuartzManager {
      * @param task
      * @throws SchedulerException
      */
-    public void runJobNow(SysTask task) throws SchedulerException {
+    public void runJobNow(ScmciwhQuartzTaskModel task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getJobGroup());
         scheduler.triggerJob(jobKey);
     }
@@ -159,13 +159,14 @@ public class QuartzManager {
      * @param task
      * @throws SchedulerException
      */
-    public void updateJobCron(SysTask task) throws SchedulerException {
+    public void updateJobCron(ScmciwhQuartzTaskModel task) throws SchedulerException {
 
         TriggerKey triggerKey = TriggerKey.triggerKey(task.getJobName(), task.getJobGroup());
 
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
 
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(task.getCronExpression());
+        // withMisfireHandlingInstructionDoNothing 启动的时候或者更新CronExpressiond的时候 不立即触发一次
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(task.getCronExpression()).withMisfireHandlingInstructionDoNothing();
 
         trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
 

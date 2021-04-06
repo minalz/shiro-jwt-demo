@@ -2,9 +2,9 @@ package cn.minalz.controller;
 
 import cn.minalz.aspect.NoRepeatSubmit;
 import cn.minalz.common.ResponseData;
-import cn.minalz.dao.TaskRepository;
+import cn.minalz.dao.QuartzRepository;
 import cn.minalz.dao.UserRepository;
-import cn.minalz.model.SysTask;
+import cn.minalz.model.ScmciwhQuartzTaskModel;
 import cn.minalz.utils.QuartzManager;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.quartz.SchedulerException;
@@ -27,7 +27,7 @@ public class TestController {
     private QuartzManager quartzManager;
 
     @Autowired
-    private TaskRepository taskRepository;
+    private QuartzRepository taskRepository;
 
     @PostMapping("/demo")
     public ResponseData demo() {
@@ -96,14 +96,14 @@ public class TestController {
     }
 
     @PostMapping("/updateJob")
-    public ResponseData updateJobCron(Long id, String cronStr) throws SchedulerException {
-        Optional<SysTask> byId = taskRepository.findById(id);
+    public ResponseData updateJobCron(Integer id, String cronStr) throws SchedulerException {
+        Optional<ScmciwhQuartzTaskModel> byId = taskRepository.findById(id);
         if (!byId.isPresent()) {
             return ResponseData.oferror("数据不存在");
         }
-        SysTask task = byId.get();
+        ScmciwhQuartzTaskModel task = byId.get();
         task.setCronExpression(cronStr);
-        SysTask saveTask = taskRepository.save(task);
+        ScmciwhQuartzTaskModel saveTask = taskRepository.save(task);
         quartzManager.updateJobCron(saveTask);
         return ResponseData.ofok();
     }

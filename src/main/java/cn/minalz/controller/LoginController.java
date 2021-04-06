@@ -23,6 +23,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Optional;
 
+/**
+ * 登录控制器
+ */
 @Controller
 @RequestMapping("/")
 public class LoginController {
@@ -102,7 +105,8 @@ public class LoginController {
 
         // 生成的token应该要存储到redis中
         UserRedisToken userRedisToken = new UserRedisToken(token, new Date().getTime());
-        redisUtil.set(RedisConstant.REDIS_STORAGE_USERNAME_PREFIX + username + "_" + token, userRedisToken, RedisConstant.REDIS_STORAGE_USERNAME_TIME);
+        redisUtil.set(RedisConstant.REDIS_STORAGE_USERNAME_PREFIX + username + "_" + token,
+                userRedisToken, RedisConstant.REDIS_STORAGE_USERNAME_TIME);
         logger.info("登录成功 --> 用户名：[{}] -- {}", username, userRedisToken);
 
         responseData.data.put("username", username);
@@ -114,12 +118,11 @@ public class LoginController {
         return responseData;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("username", "cjgly");
         String token = JwtUtil.generateToken(map);
-        System.out.println("token -- " + token);
-    }
+    }*/
 
     /**
      * 退出操作由前端清除存储在缓存中的token即可
@@ -130,12 +133,11 @@ public class LoginController {
     @ResponseBody
     public ResponseData logout(){
         ResponseData responseData = new ResponseData();
-        System.out.println("执行退出登录的操作");
+        logger.info("执行退出登录的操作");
         try {
             // 清除账号的信息 将shiro中存入的token清除掉
             Subject subject = SecurityUtils.getSubject();
             ScmciwhUser user = (ScmciwhUser)subject.getPrincipal();
-            System.out.println("user -- " + user);
 //            subject.logout();
             // 删除Redis中的token缓存
 //            redisUtil.del(RedisConstant.REDIS_STORAGE_USERNAME_PREFIX);

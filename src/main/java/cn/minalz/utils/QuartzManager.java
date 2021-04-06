@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Quartz管理类
+ */
 @Service
 @Slf4j
 public class QuartzManager {

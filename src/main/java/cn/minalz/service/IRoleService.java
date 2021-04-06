@@ -21,14 +21,14 @@ public interface IRoleService {
      *
      * @param role
      */
-    public ScmciwhRole saveRole(ScmciwhRole role);
+    ScmciwhRole saveRole(ScmciwhRole role);
 
     /**
      * 根据角色ID删除对应的单条数据
      *
      * @param id
      */
-    public void deleteById(Long id);
+    void deleteById(Long id);
 
     /**
      * 根据角色ID查询对应的单条数据
@@ -36,5 +36,5 @@ public interface IRoleService {
      * @param id
      * @return
      */
-    public ScmciwhRole findById(Long id);
+    ScmciwhRole findById(Long id);
 }

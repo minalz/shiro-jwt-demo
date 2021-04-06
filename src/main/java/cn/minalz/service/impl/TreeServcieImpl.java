@@ -143,7 +143,8 @@ public class TreeServcieImpl implements ITreeService {
     private List<TreeNode> transDepartment(List<TreeNode> rootList) {
         List<TreeNode> nodeList = new ArrayList<>();
         for (TreeNode treeNode : rootList) {
-            if (treeNode.getId() == treeNode.getPId()) {//表明是一级父类
+            //表明是一级父类
+            if (treeNode.getId() == treeNode.getPId()) {
                 nodeList.add(treeNode);
                 List<TreeNode> treeNodes = setChildren(treeNode.getId(), rootList);
                 if (treeNodes != null) {
@@ -180,8 +181,9 @@ public class TreeServcieImpl implements ITreeService {
      * @return
      */
     private void transferTreeNode(ScmciwhPermission permission, TreeNode treeNode) {
-        if (permission == null)
+        if (permission == null) {
             return;
+        }
         treeNode.setId(permission.getId());
         treeNode.setName(permission.getPermissionName());
         treeNode.setPId(permission.getParentId());

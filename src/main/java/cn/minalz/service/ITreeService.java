@@ -17,7 +17,7 @@ public interface ITreeService {
      * @param id
      * @return
      */
-    public TreeNode getById(Long id);
+    TreeNode getById(Long id);
 
     /**
      * 根据权限id获取对应的权限数据(单树)
@@ -25,14 +25,14 @@ public interface ITreeService {
      * @param id
      * @return
      */
-    public TreeNode getTreeById(Long id);
+    TreeNode getTreeById(Long id);
 
     /**
      * 根据权限的根节点查询对应的权限数据(可能是多树，如果是多个根节点的话)
      *
      * @return
      */
-    public List<TreeNode> getTrees();
+    List<TreeNode> getTrees();
 
     /**
      * 根据父id获取对应的子node
@@ -40,7 +40,7 @@ public interface ITreeService {
      * @param id
      * @return
      */
-    public List<TreeNode> getChildrenById(Long id);
+    List<TreeNode> getChildrenById(Long id);
 
     /**
      * 根据父id生成树结构(单树)
@@ -48,16 +48,16 @@ public interface ITreeService {
      * @param id
      * @return
      */
-    public TreeNode generateTreeNode(Long id);
+    TreeNode generateTreeNode(Long id);
 
     /**
      * 根据单独的一个角色查询对应的树节点
      */
-    public List<TreeNode> getTreeByRole(ScmciwhRole role);
+    List<TreeNode> getTreeByRole(ScmciwhRole role);
 
     /**
      * 根据角色集合查询对应的树节点
      */
-    public List<TreeNode> getTreeByRoles(Set<ScmciwhRole> roles);
+    List<TreeNode> getTreeByRoles(Set<ScmciwhRole> roles);
 
 }

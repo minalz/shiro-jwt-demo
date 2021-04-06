@@ -5,6 +5,9 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.authz.permission.WildcardPermission;
 
+/**
+ * URL权限解析器
+ */
 @Slf4j
 public class UrlPermissionResolver implements PermissionResolver {
 

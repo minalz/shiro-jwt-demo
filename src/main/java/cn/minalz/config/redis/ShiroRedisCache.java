@@ -12,6 +12,8 @@ import java.util.Set;
 
 /**
  * 自定义shiro的Redis缓存
+ * @param <K> key
+ * @param <V> value
  */
 @Slf4j
 public class ShiroRedisCache<K, V> implements Cache<K, V> {

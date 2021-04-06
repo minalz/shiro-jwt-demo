@@ -8,16 +8,19 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+/**
+ * 邮件发送工具类
+ */
 public class SendEmailUtil {
 
     // 发送方
-    private static final String from = "发送方的邮箱地址";
+    private static final String FROM = "发送方的邮箱地址";
     // 接收方
-    private static final String to = "接受放的邮箱地址";
+    private static final String TO = "接受放的邮箱地址";
     // 发送方 登录用户名
-    private static final String username = "登录名";
+    private static final String USERNAME = "登录名";
     // 发送方 邮箱授权码 不是对应的登录密码
-    private static final String authorizationCode = "授权码";
+    private static final String AUTHORIZATIONCODE = "授权码";
 
     public static boolean sendMail(String emailMsg) {
 
@@ -50,7 +53,7 @@ public class SendEmailUtil {
             MimeMessage message = new MimeMessage(session);
 
             // 设置邮件发送方
-            message.setFrom(new InternetAddress(from));
+            message.setFrom(new InternetAddress(FROM));
 
             // 设置邮件发送的主题<邮件标题>
             message.setSubject("邮件发送设置");
@@ -61,8 +64,8 @@ public class SendEmailUtil {
 
             // 如果是自己搭建的邮箱服务器 可以用下面这个
 //            transport.connect("yourselfIP", 123, username, authorizationCode);
-            transport.connect(username, authorizationCode);
-            transport.sendMessage(message, new Address[]{new InternetAddress(to)});
+            transport.connect(USERNAME, AUTHORIZATIONCODE);
+            transport.sendMessage(message, new Address[]{new InternetAddress(TO)});
             transport.close();
             return true;
         } catch (MessagingException e) {
@@ -72,8 +75,6 @@ public class SendEmailUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println("开始发送");
         sendMail("仅仅是用于邮件测试");
-        System.out.println("发送完成");
     }
 }

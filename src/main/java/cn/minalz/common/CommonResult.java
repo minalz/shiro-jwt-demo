@@ -1,7 +1,6 @@
 package cn.minalz.common;
 
 import cn.minalz.enums.ErrorEnum;
-import cn.minalz.exception.GloableException;
 
 /**
  * 统一返回实体类

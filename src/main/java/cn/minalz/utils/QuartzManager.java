@@ -27,28 +27,24 @@ public class QuartzManager {
      * @throws SchedulerException
      */
     @SuppressWarnings("unchecked")
-    public void addJob(ScmciwhQuartzTaskModel task) {
-        try {
-            // 创建jobDetail实例，绑定Job实现类
-            // 指明job的名称，所在组的名称，以及绑定job类
+    public void addJob(ScmciwhQuartzTaskModel task) throws Exception {
+        // 创建jobDetail实例，绑定Job实现类
+        // 指明job的名称，所在组的名称，以及绑定job类
 
-            Class<? extends Job> jobClass = (Class<? extends Job>) (Class.forName(task.getJobClass()).newInstance()
-                    .getClass());
-            JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(task.getJobName(), task.getJobGroup())// 任务名称和组构成任务key
-                    .build();
-            // 定义调度触发规则
-            // 使用cornTrigger规则
-            Trigger trigger = TriggerBuilder.newTrigger().withIdentity(task.getJobName(), task.getJobGroup())// 触发器key
-                    .startAt(DateBuilder.futureDate(1, DateBuilder.IntervalUnit.SECOND))
-                    .withSchedule(CronScheduleBuilder.cronSchedule(task.getCronExpression())).startNow().build();
-            // 把作业和触发器注册到任务调度中
-            scheduler.scheduleJob(jobDetail, trigger);
-            // 启动
-            if (!scheduler.isShutdown()) {
-                scheduler.start();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Class<? extends Job> jobClass = (Class<? extends Job>) (Class.forName(task.getJobClass()).newInstance()
+                .getClass());
+        JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(task.getJobName(), task.getJobGroup())// 任务名称和组构成任务key
+                .build();
+        // 定义调度触发规则
+        // 使用cornTrigger规则
+        Trigger trigger = TriggerBuilder.newTrigger().withIdentity(task.getJobName(), task.getJobGroup())// 触发器key
+                .startAt(DateBuilder.futureDate(1, DateBuilder.IntervalUnit.SECOND))
+                .withSchedule(CronScheduleBuilder.cronSchedule(task.getCronExpression())).startNow().build();
+        // 把作业和触发器注册到任务调度中
+        scheduler.scheduleJob(jobDetail, trigger);
+        // 启动
+        if (!scheduler.isShutdown()) {
+            scheduler.start();
         }
     }
 

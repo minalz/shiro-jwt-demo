@@ -31,7 +31,7 @@ public class QuartzServiceImpl implements IQuartzService {
     QuartzManager quartzManager;
 
     @Override
-    public void initSchedule() {
+    public void initSchedule() throws Exception {
         // 这里获取任务信息数据
         List<ScmciwhQuartzTaskModel> jobList = quartzRepository.findAll();
         for (ScmciwhQuartzTaskModel task : jobList) {
@@ -52,7 +52,7 @@ public class QuartzServiceImpl implements IQuartzService {
     }
 
     @Override
-    public ResponseData addJob(ScmciwhQuartzTaskModel quartzTask) throws SchedulerException {
+    public ResponseData addJob(ScmciwhQuartzTaskModel quartzTask) throws Exception {
         // 先更新到数据库中
         ScmciwhQuartzTaskModel saveTask = quartzRepository.save(quartzTask);
         if (JobStatusEnum.RUNNING.getCode().equals(saveTask.getJobStatus())) {
@@ -73,7 +73,7 @@ public class QuartzServiceImpl implements IQuartzService {
     }
 
     @Override
-    public ResponseData updateJob(ScmciwhQuartzTaskModel quartzTask) throws SchedulerException {
+    public ResponseData updateJob(ScmciwhQuartzTaskModel quartzTask) throws Exception {
         // 先查询数据库中的数据 是否被删掉了
         ScmciwhQuartzTaskModel task = findById(quartzTask.getId());
         // 然后更新到数据库中

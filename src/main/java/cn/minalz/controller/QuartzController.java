@@ -31,7 +31,7 @@ public class QuartzController {
 
     @ApiOperation("新增加一个Job")
     @PostMapping("/addJob")
-    public ResponseData addJob(@ApiParam("ScmciwhQuartzTaskModel对象信息") ScmciwhQuartzTaskModel quartzTask) throws SchedulerException {
+    public ResponseData addJob(@ApiParam("ScmciwhQuartzTaskModel对象信息") ScmciwhQuartzTaskModel quartzTask) throws Exception {
         return quartzService.addJob(quartzTask);
     }
 
@@ -43,7 +43,7 @@ public class QuartzController {
 
     @ApiOperation("更新Job信息")
     @PostMapping("/updateJob")
-    public ResponseData updateJob(@ApiParam("ScmciwhQuartzTaskModel对象信息") ScmciwhQuartzTaskModel quartzTask) throws SchedulerException {
+    public ResponseData updateJob(@ApiParam("ScmciwhQuartzTaskModel对象信息") ScmciwhQuartzTaskModel quartzTask) throws Exception {
         return quartzService.updateJob(quartzTask);
     }
 

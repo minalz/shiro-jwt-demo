@@ -9,7 +9,7 @@ import org.quartz.SchedulerException;
  */
 public interface IQuartzService {
 
-    void initSchedule() throws SchedulerException;
+    void initSchedule() throws Exception;
 
     /**
      * 根据ID查询对应的任务配置信息
@@ -24,7 +24,7 @@ public interface IQuartzService {
      * @return
      * @throws SchedulerException
      */
-    ResponseData addJob(ScmciwhQuartzTaskModel quartzTask) throws SchedulerException;
+    ResponseData addJob(ScmciwhQuartzTaskModel quartzTask) throws Exception;
 
     /**
      * 删除Job(一个或多个)
@@ -39,7 +39,7 @@ public interface IQuartzService {
      * @param quartzTask
      * @return
      */
-    ResponseData updateJob(ScmciwhQuartzTaskModel quartzTask) throws SchedulerException;
+    ResponseData updateJob(ScmciwhQuartzTaskModel quartzTask) throws Exception;
 
     /**
      * 查询所有Job
